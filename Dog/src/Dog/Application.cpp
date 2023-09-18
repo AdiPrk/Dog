@@ -2,6 +2,8 @@
 
 #include "Application.h"
 
+#include "Events/ApplicationEvents.h"
+
 namespace Dog {
 
 	Application::Application() {
@@ -13,6 +15,9 @@ namespace Dog {
 	}
 
 	void Application::Run() {
+		WindowResizeEvent e(1280, 720);
+		DOG_TRACE(e);
+
 		while (true) {};
 	}
 }

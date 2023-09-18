@@ -4,6 +4,9 @@
     <Filter Include="Dog">
       <UniqueIdentifier>{DFE2870B-4BEC-877C-D467-9E7C4070937C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dog\Events">
+      <UniqueIdentifier>{E3BD63A4-CF75-A5F1-387D-7E4D245440E2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Dog.h" />
@@ -15,6 +18,18 @@
     </ClInclude>
     <ClInclude Include="src\Dog\EntryPoint.h">
       <Filter>Dog</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Events\ApplicationEvents.h">
+      <Filter>Dog\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Events\Events.h">
+      <Filter>Dog\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Events\KeyEvents.h">
+      <Filter>Dog\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Events\MouseEvents.h">
+      <Filter>Dog\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Dog\Log.h">
       <Filter>Dog</Filter>
