@@ -1,2 +1,2 @@
 # Dog
-Dog Game Engine
+Dog Engine
