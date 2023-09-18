@@ -35,6 +35,8 @@
       <Filter>Dog</Filter>
     </ClInclude>
     <ClInclude Include="src\dogpch.h" />
+    <ClInclude Include="src\Dog\Window.h" />
+    <ClInclude Include="src\Platform\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dog\Application.cpp">
@@ -44,5 +46,6 @@
       <Filter>Dog</Filter>
     </ClCompile>
     <ClCompile Include="src\dogpch.cpp" />
+    <ClCompile Include="src\Platform\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>
