@@ -2,7 +2,7 @@
 
 #include "Dog/Window.h"
 
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
 namespace Dog {
 

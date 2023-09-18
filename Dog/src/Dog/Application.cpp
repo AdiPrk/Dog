@@ -2,13 +2,14 @@
 
 #include "Application.h"
 
-#include "GLFW/glfw3.h"
+#include "glad/glad.h"
 
 namespace Dog {
 
 	Application::Application() {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+	
 	}
 
 	Application::~Application() {

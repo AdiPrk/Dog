@@ -13,8 +13,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories
 IncludeDir = {}
 IncludeDir["GLFW"] = "Dog/vendor/GLFW/include"
+IncludeDir["Glad"] = "Dog/vendor/Glad/include"
 
 include "Dog/vendor/GLFW"
+include "Dog/vendor/Glad"
 
 project "Dog"
 	location "Dog"
@@ -37,12 +39,14 @@ project "Dog"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
 	}
 
 	links 
 	{ 
 		"GLFW",
+		"GLAD",
 		"opengl32.lib"
 	}
 
@@ -54,7 +58,8 @@ project "Dog"
 		defines
 		{
 			"DOG_PLATFORM_WINDOWS",
-			"DOG_BUILD_DLL"
+			"DOG_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
