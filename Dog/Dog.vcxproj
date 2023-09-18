@@ -84,6 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -110,6 +111,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -137,6 +139,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -160,18 +163,22 @@
     <ClInclude Include="src\Dog\Events\Events.h" />
     <ClInclude Include="src\Dog\Events\KeyEvents.h" />
     <ClInclude Include="src\Dog\Events\MouseEvents.h" />
+    <ClInclude Include="src\Dog\Layer.h" />
+    <ClInclude Include="src\Dog\LayerStack.h" />
     <ClInclude Include="src\Dog\Log.h" />
-    <ClInclude Include="src\dogpch.h" />
     <ClInclude Include="src\Dog\Window.h" />
     <ClInclude Include="src\Platform\WindowsWindow.h" />
+    <ClInclude Include="src\dogpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dog\Application.cpp" />
+    <ClCompile Include="src\Dog\Layer.cpp" />
+    <ClCompile Include="src\Dog\LayerStack.cpp" />
     <ClCompile Include="src\Dog\Log.cpp" />
+    <ClCompile Include="src\Platform\WindowsWindow.cpp" />
     <ClCompile Include="src\dogpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Platform\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

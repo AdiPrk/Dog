@@ -7,6 +7,9 @@
     <Filter Include="Dog\Events">
       <UniqueIdentifier>{E3BD63A4-CF75-A5F1-387D-7E4D245440E2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Dog.h" />
@@ -31,21 +34,39 @@
     <ClInclude Include="src\Dog\Events\MouseEvents.h">
       <Filter>Dog\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dog\Layer.h">
+      <Filter>Dog</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\LayerStack.h">
+      <Filter>Dog</Filter>
+    </ClInclude>
     <ClInclude Include="src\Dog\Log.h">
       <Filter>Dog</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dog\Window.h">
+      <Filter>Dog</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\WindowsWindow.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
     <ClInclude Include="src\dogpch.h" />
-    <ClInclude Include="src\Dog\Window.h" />
-    <ClInclude Include="src\Platform\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dog\Application.cpp">
       <Filter>Dog</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dog\Layer.cpp">
+      <Filter>Dog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dog\LayerStack.cpp">
+      <Filter>Dog</Filter>
+    </ClCompile>
     <ClCompile Include="src\Dog\Log.cpp">
       <Filter>Dog</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\WindowsWindow.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
     <ClCompile Include="src\dogpch.cpp" />
-    <ClCompile Include="src\Platform\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>
