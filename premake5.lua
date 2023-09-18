@@ -10,6 +10,12 @@ workspace "Dog"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories
+IncludeDir = {}
+IncludeDir["GLFW"] = "Dog/vendor/GLFW/include"
+
+include "Dog/vendor/GLFW"
+
 project "Dog"
 	location "Dog"
 	kind "SharedLib"
@@ -30,7 +36,14 @@ project "Dog"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links 
+	{ 
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -69,7 +82,6 @@ project "Sandbox"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -84,7 +96,7 @@ project "Sandbox"
 
 	links
 	{
-		"Dog" 
+		"Dog"
 	}
 
 	filter "system:windows"
