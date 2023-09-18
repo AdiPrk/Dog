@@ -1,3 +1,5 @@
+#include "dogpch.h"
+
 #include "Application.h"
 
 namespace Dog {

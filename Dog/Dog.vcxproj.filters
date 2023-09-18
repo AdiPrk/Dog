@@ -19,6 +19,7 @@
     <ClInclude Include="src\Dog\Log.h">
       <Filter>Dog</Filter>
     </ClInclude>
+    <ClInclude Include="src\dogpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dog\Application.cpp">
@@ -27,5 +28,6 @@
     <ClCompile Include="src\Dog\Log.cpp">
       <Filter>Dog</Filter>
     </ClCompile>
+    <ClCompile Include="src\dogpch.cpp" />
   </ItemGroup>
 </Project>

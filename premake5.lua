@@ -18,6 +18,8 @@ project "Dog"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "dogpch.h"
+	pchsource "Dog/src/dogpch.cpp"
 
 	files
 	{
@@ -27,6 +29,7 @@ project "Dog"
 
 	includedirs
 	{
+		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include"
 	}
 
