@@ -25,6 +25,7 @@ class Sandbox : public Dog::Application
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
+		PushOverlay(new Dog::ImGuiLayer());
 	}
 	~Sandbox() {
 

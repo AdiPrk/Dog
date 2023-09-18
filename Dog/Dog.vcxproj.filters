@@ -50,6 +50,8 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="src\dogpch.h" />
+    <ClInclude Include="src\Dog\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dog\Application.cpp">
@@ -68,5 +70,7 @@
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="src\dogpch.cpp" />
+    <ClCompile Include="src\Dog\ImGui\imGuiLayer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>

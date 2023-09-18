@@ -4,3 +4,6 @@
 [submodule "Dog/vendor/GLFW"]
 	path = Dog/vendor/GLFW
 	url = https://github.com/Adiprk/glfw
+[submodule "Dog/vendor/imgui"]
+	path = Dog/vendor/imgui
+	url = https://github.com/AdiPrk/imgui
