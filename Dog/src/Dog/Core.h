@@ -10,6 +10,10 @@
 	#error Dog only supports Windows
 #endif
 
+#ifdef DOG_DEBUG
+	#define DOG_ENABLE_ASSERTS
+#endif
+
 #ifdef DOG_ENABLE_ASSERTS
 	#define DOG_ASSERT(x, ...) { if(!(x)) { DOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 	#define DOG_CORE_ASSERT(x, ...) { if(!(x)) { DOG_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
