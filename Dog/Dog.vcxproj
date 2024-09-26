@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{4d2ed8e4-ea0a-44a3-bdc2-d52582f4dfe7}</ProjectGuid>
+    <RootNamespace>Dog</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\Dog;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\Dog;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PCH/pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Include;$(ProjectDir)externals\glfw\include;$(ProjectDir)externals\glm;$(ProjectDir)externals\stb_image\stb;$(ProjectDir)externals\tiny_obj_loader;$(ProjectDir)externals\vk_extensions;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\glslang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Lib;$(ProjectDir)externals\glfw\lib-vc2022;$(ProjectDir)externals\assimp\lib;$(ProjectDir)externals\glslang\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3_mt.lib;glslangd.lib;SPIRVd.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)externals\assimp\assimp-vc143-mtd.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\poly2tri.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\minizip.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\pugixml.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\zlibd1.dll" "$(TargetDir)"
+</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PCH/pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Include;$(ProjectDir)externals\glfw\include;$(ProjectDir)externals\glm;$(ProjectDir)externals\stb_image\stb;$(ProjectDir)externals\tiny_obj_loader;$(ProjectDir)externals\vk_extensions;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\glslang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Lib;$(ProjectDir)externals\glfw\lib-vc2022;$(ProjectDir)externals\assimp\lib;$(ProjectDir)externals\glslang\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3_mt.lib;glslang.lib;SPIRV.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)externals\assimp\assimp-vc143-mt.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\poly2tri.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\minizip.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\pugixml.dll" "$(TargetDir)"
+xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
+</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="externals\imgui\backends\imgui_impl_glfw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\backends\imgui_impl_opengl3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\backends\imgui_impl_vulkan.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_stdlib.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Dog\Entities\GameObject.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Buffers\Buffer.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Camera.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Core\Device.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Core\SwapChain.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Descriptors\Descriptors.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Animation.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Animator.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\assimpGlmHelper.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Bone.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\BoneInfo.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Texture\ImGuiTexture.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Mesh.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Model.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\ModelLibrary.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Texture\Texture.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Texture\TextureLibrary.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Pipeline\Pipeline.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Renderer.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Systems\PointLightSystem.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Utils\Utils.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Window\Window.cpp" />
+    <ClCompile Include="src\Dog\Input\KeyboardController.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\PCH\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="externals\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="externals\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="externals\imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="externals\imgui\backends\imgui_impl_vulkan.h" />
+    <ClInclude Include="externals\imgui\imconfig.h" />
+    <ClInclude Include="externals\imgui\imgui.h" />
+    <ClInclude Include="externals\imgui\imgui_internal.h" />
+    <ClInclude Include="externals\imgui\imgui_stdlib.h" />
+    <ClInclude Include="externals\imgui\imstb_rectpack.h" />
+    <ClInclude Include="externals\imgui\imstb_textedit.h" />
+    <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Dog\Entities\GameObject.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Buffers\Buffer.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Camera.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Core\Device.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Core\SwapChain.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Descriptors\Descriptors.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\FrameInfo.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Animation.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Animator.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\assimpGlmHelper.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Bone.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\BoneInfo.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Texture\ImGuiTexture.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Mesh.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Model.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\ModelLibrary.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Texture\Texture.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Texture\TextureLibrary.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Pipeline\Pipeline.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Renderer.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Systems\PointLightSystem.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Utils\Utils.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Window\Window.h" />
+    <ClInclude Include="src\Dog\Input\KeyboardController.h" />
+    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\PCH\pch.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
