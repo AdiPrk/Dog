@@ -1,31 +1,48 @@
 #pragma once
 
-class Model;
 
-class ModelLibrary {
-public:
-	ModelLibrary();
-	~ModelLibrary();
+namespace Dog {
 
-	const static uint32_t INVALID_MODEL_INDEX;
+	class Model;
+	class Device;
+	class TextureLibrary;
 
-	/*********************************************************************
-	 * param:  modelPath: path to the model file
-	 * return: index of the model in the library
-	 * 
-	 * brief:  Adds a model to the library if it doesn't already exist.
-	 *********************************************************************/
-	uint32_t AddModel(const std::string& modelPath);
+	class ModelLibrary
+	{
+	public:
+		ModelLibrary(Device& device, TextureLibrary& textureLibrary);
+		~ModelLibrary();
 
-	/*********************************************************************
-	 * param:  modelPath: path to the model file
-	 * return: index of the model in the library
-	 * 
-	 * brief: Gets the index of the model in the library.
-	 *********************************************************************/
-	uint32_t GetModel(const std::string& modelPath);
+		/*********************************************************************
+		 * param:  modelPath: path to the model file
+		 * return: index of the model in the library
+		 *
+		 * brief:  Adds a model to the library if it doesn't already exist.
+		 *********************************************************************/
+		uint32_t AddModel(const std::string& modelPath);
 
-private:
-	std::vector<std::unique_ptr<Model>> models;
-	std::unordered_map<std::string, uint32_t> modelMap;
-};
+		/*********************************************************************
+		 * param:  modelPath: path to the model file
+		 * return: index of the model in the library
+		 *
+		 * brief: Gets the index of the model in the library.
+		 *********************************************************************/
+		uint32_t GetModel(const std::string& modelPath);
+
+		/*********************************************************************
+		 * param:  index: The model index
+		 * return: The model at the index
+		 *
+		 * brief:  Gets the model at the given index
+		 *********************************************************************/
+		Model* GetModelByIndex(uint32_t index);
+
+	private:
+		std::vector<std::unique_ptr<Model>> m_Models;
+		std::unordered_map<std::string, uint32_t> m_ModelMap;
+
+		Device& m_Device;
+		TextureLibrary& m_TextureLibrary;
+	};
+
+} // namespace Dog

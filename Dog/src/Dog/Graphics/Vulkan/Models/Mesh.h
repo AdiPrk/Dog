@@ -3,53 +3,57 @@
 #include "../Buffers/Buffer.h"
 #include "../Core/Device.h"
 
-struct Material {
-    uint32_t diffuseTextures;
-    uint32_t specularTextures;
-    uint32_t normalMaps;
-    uint32_t heightMaps;
-    // Add more texture types here later
+namespace Dog {
 
-    float shininess = 32.0f; // Default value
-};
+    struct Material {
+        uint32_t diffuseTextures;
+        uint32_t specularTextures;
+        uint32_t normalMaps;
+        uint32_t heightMaps;
+        // Add more texture types here later
 
-struct Vertex {
-    glm::vec3 position{};
-    glm::vec3 color{};
-    glm::vec3 normal{};
-    glm::vec2 uv{};
+        float shininess = 32.0f; // Default value
+    };
 
-    int mBoneIDs[MAX_BONE_INFLUENCE];
-    float mWeights[MAX_BONE_INFLUENCE];
+    struct Vertex {
+        glm::vec3 position{};
+        glm::vec3 color{};
+        glm::vec3 normal{};
+        glm::vec2 uv{};
 
-    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
-    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
+        int mBoneIDs[MAX_BONE_INFLUENCE];
+        float mWeights[MAX_BONE_INFLUENCE];
 
-    bool operator==(const Vertex& other) const {
-        return position == other.position && color == other.color && normal == other.normal &&
-            uv == other.uv;
-    }
-};
+        static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
+        static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
 
-class Mesh {
-public:
-    Mesh() = default;
+        bool operator==(const Vertex& other) const {
+            return position == other.position && color == other.color && normal == other.normal &&
+                uv == other.uv;
+        }
+    };
 
-    void createVertexBuffers(LveDevice& device);
-    void createIndexBuffers(LveDevice& device);
-    void bind(VkCommandBuffer commandBuffer);
-    void draw(VkCommandBuffer commandBuffer);
+    class Mesh {
+    public:
+        Mesh() = default;
 
-    std::unique_ptr<Buffer> vertexBuffer;
-    uint32_t vertexCount = 0;
+        void createVertexBuffers(Device& device);
+        void createIndexBuffers(Device& device);
+        void bind(VkCommandBuffer commandBuffer);
+        void draw(VkCommandBuffer commandBuffer);
 
-    bool hasIndexBuffer = false;
-    std::unique_ptr<Buffer> indexBuffer;
-    uint32_t indexCount = 0;
+        std::unique_ptr<Buffer> vertexBuffer;
+        uint32_t vertexCount = 0;
 
-    std::vector<Vertex> vertices{};
-    std::vector<uint32_t> indices{};
+        bool hasIndexBuffer = false;
+        std::unique_ptr<Buffer> indexBuffer;
+        uint32_t indexCount = 0;
 
-    uint32_t textureIndex = 999;
-    Material material{};
-};
+        std::vector<Vertex> vertices{};
+        std::vector<uint32_t> indices{};
+
+        uint32_t textureIndex = 999;
+        Material material{};
+    };
+
+} // namespace Dog

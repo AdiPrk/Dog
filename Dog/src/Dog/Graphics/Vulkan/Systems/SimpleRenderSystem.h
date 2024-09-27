@@ -6,26 +6,32 @@
 #include "Entities/GameObject.h"
 #include "../Pipeline/Pipeline.h"
 #include "../Texture/TextureLibrary.h"
+#include "../Models/ModelLibrary.h"
 
-class SimpleRenderSystem {
-public:
-    SimpleRenderSystem(
-        LveDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout, TextureLibrary& textureLibrary);
-    ~SimpleRenderSystem();
+namespace Dog {
 
-    SimpleRenderSystem(const SimpleRenderSystem&) = delete;
-    SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
+    class SimpleRenderSystem {
+    public:
+        SimpleRenderSystem(
+            Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout, TextureLibrary& textureLibrary, ModelLibrary& modelLibrary);
+        ~SimpleRenderSystem();
 
-    void renderGameObjects(FrameInfo& frameInfo);
+        SimpleRenderSystem(const SimpleRenderSystem&) = delete;
+        SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-private:
-    void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
-    void createPipeline(VkRenderPass renderPass);
+        void renderGameObjects(FrameInfo& frameInfo);
 
-    LveDevice& lveDevice;
-    TextureLibrary& textureLibrary;
+    private:
+        void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
+        void createPipeline(VkRenderPass renderPass);
 
-    std::unique_ptr<Pipeline> lvePipeline;
-    std::unique_ptr<Pipeline> lveWireframePipeline;
-    VkPipelineLayout pipelineLayout;
-};
+        Device& device;
+        TextureLibrary& textureLibrary;
+        ModelLibrary& modelLibrary;
+
+        std::unique_ptr<Pipeline> lvePipeline;
+        std::unique_ptr<Pipeline> lveWireframePipeline;
+        VkPipelineLayout pipelineLayout;
+    };
+
+} // namespace Dog

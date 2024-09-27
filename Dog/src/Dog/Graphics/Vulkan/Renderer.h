@@ -4,47 +4,51 @@
 #include "Core/SwapChain.h"
 #include "Window/Window.h"
 
-class LveRenderer {
-public:
-    LveRenderer(LveWindow& window, LveDevice& device);
-    ~LveRenderer();
+namespace Dog {
 
-    LveRenderer(const LveRenderer&) = delete;
-    LveRenderer& operator=(const LveRenderer&) = delete;
+    class Renderer {
+    public:
+        Renderer(Window& window, Device& device);
+        ~Renderer();
 
-    VkRenderPass getSwapChainRenderPass() const { return lveSwapChain->getRenderPass(); }
-    float getAspectRatio() const { return lveSwapChain->extentAspectRatio(); }
-    bool isFrameInProgress() const { return isFrameStarted; }
+        Renderer(const Renderer&) = delete;
+        Renderer& operator=(const Renderer&) = delete;
 
-    VkCommandBuffer getCurrentCommandBuffer() const {
-        assert(isFrameStarted && "Cannot get command buffer when frame not in progress");
-        return commandBuffers[currentFrameIndex];
-    }
+        VkRenderPass getSwapChainRenderPass() const { return lveSwapChain->getRenderPass(); }
+        float getAspectRatio() const { return lveSwapChain->extentAspectRatio(); }
+        bool isFrameInProgress() const { return isFrameStarted; }
 
-    int getFrameIndex() const {
-        assert(isFrameStarted && "Cannot get frame index when frame not in progress");
-        return currentFrameIndex;
-    }
+        VkCommandBuffer getCurrentCommandBuffer() const {
+            assert(isFrameStarted && "Cannot get command buffer when frame not in progress");
+            return commandBuffers[currentFrameIndex];
+        }
 
-    VkCommandBuffer beginFrame();
-    void endFrame();
-    void beginSwapChainRenderPass(VkCommandBuffer commandBuffer);
-    void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
+        int getFrameIndex() const {
+            assert(isFrameStarted && "Cannot get frame index when frame not in progress");
+            return currentFrameIndex;
+        }
 
-    VkDescriptorPool imGuiDescriptorPool;
-    VkDescriptorSetLayout samplerSetLayout;
-private:
-    void createCommandBuffers();
-    void freeCommandBuffers();
-    void recreateSwapChain();
+        VkCommandBuffer beginFrame();
+        void endFrame();
+        void beginSwapChainRenderPass(VkCommandBuffer commandBuffer);
+        void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
 
-    LveWindow& lveWindow;
-    LveDevice& lveDevice;
-    std::unique_ptr<LveSwapChain> lveSwapChain;
-    std::vector<VkCommandBuffer> commandBuffers;
+        VkDescriptorPool imGuiDescriptorPool;
+        VkDescriptorSetLayout samplerSetLayout;
+    private:
+        void createCommandBuffers();
+        void freeCommandBuffers();
+        void recreateSwapChain();
 
-    uint32_t currentImageIndex;
-    int currentFrameIndex{ 0 };
-    bool isFrameStarted{ false };
+        Window& lveWindow;
+        Device& device;
+        std::unique_ptr<SwapChain> lveSwapChain;
+        std::vector<VkCommandBuffer> commandBuffers;
 
-};
+        uint32_t currentImageIndex;
+        int currentFrameIndex{ 0 };
+        bool isFrameStarted{ false };
+
+    };
+
+}

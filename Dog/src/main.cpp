@@ -2,7 +2,7 @@
 #include "Engine.h"
 
 int main() {
-    Engine engine{};
+    Dog::Engine engine{};
 
     try {
         engine.run();

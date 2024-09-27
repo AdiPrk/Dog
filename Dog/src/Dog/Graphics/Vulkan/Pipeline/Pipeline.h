@@ -2,60 +2,64 @@
 
 #include "../Core/Device.h"
 
-struct PipelineConfigInfo {
-    PipelineConfigInfo() = default;
-    PipelineConfigInfo(const PipelineConfigInfo&) = delete;
-    PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
+namespace Dog {
 
-    std::vector<VkVertexInputBindingDescription> bindingDescriptions{};
-    std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
-    VkPipelineViewportStateCreateInfo viewportInfo;
-    VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
-    VkPipelineRasterizationStateCreateInfo rasterizationInfo;
-    VkPipelineMultisampleStateCreateInfo multisampleInfo;
-    VkPipelineColorBlendAttachmentState colorBlendAttachment;
-    VkPipelineColorBlendStateCreateInfo colorBlendInfo;
-    VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
-    std::vector<VkDynamicState> dynamicStateEnables;
-    VkPipelineDynamicStateCreateInfo dynamicStateInfo;
-    VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
-    VkRenderPass renderPass = VK_NULL_HANDLE;
-    uint32_t subpass = 0;
-    int32_t basePipelineIndex = -1;
-    VkPipeline basePipelineHandle = VK_NULL_HANDLE;
-    VkPipelineCreateFlags flags = 0;
-};
+    struct PipelineConfigInfo {
+        PipelineConfigInfo() = default;
+        PipelineConfigInfo(const PipelineConfigInfo&) = delete;
+        PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
 
-class Pipeline {
-public:
-    Pipeline(
-        LveDevice& device,
-        const std::string& vertFilepath,
-        const std::string& fragFilepath,
-        const PipelineConfigInfo& configInfo);
-    ~Pipeline();
+        std::vector<VkVertexInputBindingDescription> bindingDescriptions{};
+        std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
+        VkPipelineViewportStateCreateInfo viewportInfo;
+        VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
+        VkPipelineRasterizationStateCreateInfo rasterizationInfo;
+        VkPipelineMultisampleStateCreateInfo multisampleInfo;
+        VkPipelineColorBlendAttachmentState colorBlendAttachment;
+        VkPipelineColorBlendStateCreateInfo colorBlendInfo;
+        VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+        std::vector<VkDynamicState> dynamicStateEnables;
+        VkPipelineDynamicStateCreateInfo dynamicStateInfo;
+        VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
+        VkRenderPass renderPass = VK_NULL_HANDLE;
+        uint32_t subpass = 0;
+        int32_t basePipelineIndex = -1;
+        VkPipeline basePipelineHandle = VK_NULL_HANDLE;
+        VkPipelineCreateFlags flags = 0;
+    };
 
-    Pipeline(const Pipeline&) = delete;
-    Pipeline& operator=(const Pipeline&) = delete;
+    class Pipeline {
+    public:
+        Pipeline(
+            Device& device,
+            const std::string& vertFilepath,
+            const std::string& fragFilepath,
+            const PipelineConfigInfo& configInfo);
+        ~Pipeline();
 
-    void bind(VkCommandBuffer commandBuffer);
+        Pipeline(const Pipeline&) = delete;
+        Pipeline& operator=(const Pipeline&) = delete;
 
-    static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
+        void bind(VkCommandBuffer commandBuffer);
 
-    VkPipeline& getPipeline() { return graphicsPipeline; }
+        static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
 
-private:
-    std::vector<char> readShaderFile(const std::string& filepath);
+        VkPipeline& getPipeline() { return graphicsPipeline; }
 
-    void createGraphicsPipeline(
-        const std::string& vertFile,
-        const std::string& fragFile,
-        const PipelineConfigInfo& configInfo);
+    private:
+        std::vector<char> readShaderFile(const std::string& filepath);
 
-    void createShaderModule(const std::vector<uint32_t>& code, VkShaderModule* shaderModule);
+        void createGraphicsPipeline(
+            const std::string& vertFile,
+            const std::string& fragFile,
+            const PipelineConfigInfo& configInfo);
 
-    LveDevice& lveDevice;
-    VkPipeline graphicsPipeline;
-    VkShaderModule vertShaderModule;
-    VkShaderModule fragShaderModule;
-};
+        void createShaderModule(const std::vector<uint32_t>& code, VkShaderModule* shaderModule);
+
+        Device& device;
+        VkPipeline graphicsPipeline;
+        VkShaderModule vertShaderModule;
+        VkShaderModule fragShaderModule;
+    };
+
+} // namespace Dog

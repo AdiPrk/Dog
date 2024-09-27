@@ -6,24 +6,28 @@
 #include "Entities/GameObject.h"
 #include "../Pipeline/Pipeline.h"
 
-class PointLightSystem {
-public:
-    PointLightSystem(
-        LveDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
-    ~PointLightSystem();
+namespace Dog {
 
-    PointLightSystem(const PointLightSystem&) = delete;
-    PointLightSystem& operator=(const PointLightSystem&) = delete;
+    class PointLightSystem {
+    public:
+        PointLightSystem(
+            Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+        ~PointLightSystem();
 
-    void update(FrameInfo& frameInfo, GlobalUbo& ubo);
-    void render(FrameInfo& frameInfo);
+        PointLightSystem(const PointLightSystem&) = delete;
+        PointLightSystem& operator=(const PointLightSystem&) = delete;
 
-private:
-    void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
-    void createPipeline(VkRenderPass renderPass);
+        void update(FrameInfo& frameInfo, GlobalUbo& ubo);
+        void render(FrameInfo& frameInfo);
 
-    LveDevice& lveDevice;
+    private:
+        void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
+        void createPipeline(VkRenderPass renderPass);
 
-    std::unique_ptr<Pipeline> lvePipeline;
-    VkPipelineLayout pipelineLayout;
-};
+        Device& device;
+
+        std::unique_ptr<Pipeline> lvePipeline;
+        VkPipelineLayout pipelineLayout;
+    };
+
+} // namespace Dog

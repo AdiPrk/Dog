@@ -1,41 +1,60 @@
 #include <PCH/pch.h>
 #include "ModelLibrary.h"
 #include "Model.h"
+#include "../Core/Device.h"
+#include "../Texture/TextureLibrary.h"
 
-const uint32_t ModelLibrary::INVALID_MODEL_INDEX = 9999;
+namespace Dog {
 
-ModelLibrary::ModelLibrary()
-{
-}
-
-ModelLibrary::~ModelLibrary()
-{
-}
-
-uint32_t ModelLibrary::AddModel(const std::string& modelPath)
-{
-	/*if (models.size() >= MAX_MODEL_COUNT) {
-		throw std::runtime_error("Model count exceeded maximum");
-		return INVALID_MODEL_INDEX;
+	ModelLibrary::ModelLibrary(Device& device, TextureLibrary& textureLibrary)
+		: m_Device(device)
+		, m_TextureLibrary(textureLibrary)
+	{
 	}
 
-	if (modelMap.find(modelPath) == modelMap.end()) {
-		modelMap[modelPath] = static_cast<uint32_t>(models.size());
-		models.push_back(std::make_unique<Model>(modelPath));
-		return static_cast<uint32_t>(models.size() - 1);
+	ModelLibrary::~ModelLibrary()
+	{
 	}
-	else {
-		return INVALID_MODEL_INDEX;
-	}*/
-	return 0;
-}
 
-uint32_t ModelLibrary::GetModel(const std::string& modelPath)
-{
-	if (modelMap.find(modelPath) != modelMap.end()) {
-		return modelMap[modelPath];
+	uint32_t ModelLibrary::AddModel(const std::string& modelPath)
+	{
+		if (m_Models.size() >= MAX_MODEL_COUNT) {
+			throw std::runtime_error("Model count exceeded maximum");
+			return INVALID_MODEL_INDEX;
+		}
+
+		if (m_ModelMap.find(modelPath) == m_ModelMap.end()) {
+			uint32_t modelIndex = static_cast<uint32_t>(m_Models.size());
+
+			m_ModelMap[modelPath] = modelIndex;
+			m_Models.push_back(std::make_unique<Model>(m_Device, modelPath, m_TextureLibrary));
+			return static_cast<uint32_t>(modelIndex);
+		}
+		else {
+			return INVALID_MODEL_INDEX;
+		}
 	}
-	else {
-		return INVALID_MODEL_INDEX;
+
+	uint32_t ModelLibrary::GetModel(const std::string& modelPath)
+	{
+		if (m_ModelMap.find(modelPath) != m_ModelMap.end()) {
+			return m_ModelMap[modelPath];
+		}
+		else {
+			return INVALID_MODEL_INDEX;
+		}
 	}
-}
+
+	Model* ModelLibrary::GetModelByIndex(uint32_t index)
+	{
+		if (index == INVALID_MODEL_INDEX) return nullptr;
+
+		if (index < m_Models.size()) {
+			return m_Models[index].get();
+		}
+		else {
+			return nullptr;
+		}
+	}
+
+} // namespace Dog

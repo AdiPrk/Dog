@@ -2,53 +2,57 @@
 
 #include "../Core/Device.h"
 
-class Buffer {
-public:
-    Buffer(
-        LveDevice& device,
-        VkDeviceSize instanceSize,
-        uint32_t instanceCount,
-        VkBufferUsageFlags usageFlags,
-        VmaMemoryUsage memoryUsage,
-        VkDeviceSize minOffsetAlignment = 1);
-    ~Buffer();
+namespace Dog {
 
-    Buffer(const Buffer&) = delete;
-    Buffer& operator=(const Buffer&) = delete;
+    class Buffer {
+    public:
+        Buffer(
+            Device& device,
+            VkDeviceSize instanceSize,
+            uint32_t instanceCount,
+            VkBufferUsageFlags usageFlags,
+            VmaMemoryUsage memoryUsage,
+            VkDeviceSize minOffsetAlignment = 1);
+        ~Buffer();
 
-    VkResult map();
-    void unmap();
+        Buffer(const Buffer&) = delete;
+        Buffer& operator=(const Buffer&) = delete;
 
-    void writeToBuffer(void* data, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-    VkResult flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-    VkDescriptorBufferInfo descriptorInfo(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-    VkResult invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+        VkResult map();
+        void unmap();
 
-    void writeToIndex(void* data, int index);
-    VkResult flushIndex(int index);
-    VkDescriptorBufferInfo descriptorInfoForIndex(int index);
-    VkResult invalidateIndex(int index);
+        void writeToBuffer(void* data, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+        VkResult flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+        VkDescriptorBufferInfo descriptorInfo(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+        VkResult invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 
-    VkBuffer getBuffer() const { return buffer; }
-    void* getMappedMemory() const { return mapped; }
-    uint32_t getInstanceCount() const { return instanceCount; }
-    VkDeviceSize getInstanceSize() const { return instanceSize; }
-    VkDeviceSize getAlignmentSize() const { return instanceSize; }
-    VkBufferUsageFlags getUsageFlags() const { return usageFlags; }
-    VkDeviceSize getBufferSize() const { return bufferSize; }
+        void writeToIndex(void* data, int index);
+        VkResult flushIndex(int index);
+        VkDescriptorBufferInfo descriptorInfoForIndex(int index);
+        VkResult invalidateIndex(int index);
 
-private:
-    static VkDeviceSize getAlignment(VkDeviceSize instanceSize, VkDeviceSize minOffsetAlignment);
+        VkBuffer getBuffer() const { return buffer; }
+        void* getMappedMemory() const { return mapped; }
+        uint32_t getInstanceCount() const { return instanceCount; }
+        VkDeviceSize getInstanceSize() const { return instanceSize; }
+        VkDeviceSize getAlignmentSize() const { return instanceSize; }
+        VkBufferUsageFlags getUsageFlags() const { return usageFlags; }
+        VkDeviceSize getBufferSize() const { return bufferSize; }
 
-    LveDevice& lveDevice;
-    void* mapped = nullptr;
-    VkBuffer buffer = VK_NULL_HANDLE;
-    VmaAllocation bufferAllocation;
+    private:
+        static VkDeviceSize getAlignment(VkDeviceSize instanceSize, VkDeviceSize minOffsetAlignment);
 
-    VkDeviceSize bufferSize;
-    uint32_t instanceCount;
-    VkDeviceSize instanceSize;
-    VkDeviceSize alignmentSize;
-    VkBufferUsageFlags usageFlags;
-    VmaMemoryUsage memoryUsage;
-};
+        Device& device;
+        void* mapped = nullptr;
+        VkBuffer buffer = VK_NULL_HANDLE;
+        VmaAllocation bufferAllocation;
+
+        VkDeviceSize bufferSize;
+        uint32_t instanceCount;
+        VkDeviceSize instanceSize;
+        VkDeviceSize alignmentSize;
+        VkBufferUsageFlags usageFlags;
+        VmaMemoryUsage memoryUsage;
+    };
+
+} // namespace Dog

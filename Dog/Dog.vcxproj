@@ -147,11 +147,11 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
     <ClCompile Include="src\Dog\Graphics\Vulkan\Core\Device.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Core\SwapChain.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Descriptors\Descriptors.cpp" />
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Animation.cpp" />
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Animator.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\Animation.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\Animator.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Models\assimpGlmHelper.cpp" />
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Bone.cpp" />
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\BoneInfo.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\Bone.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\BoneInfo.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Texture\ImGuiTexture.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Mesh.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Model.cpp" />
@@ -162,7 +162,6 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
     <ClCompile Include="src\Dog\Graphics\Vulkan\Renderer.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Systems\PointLightSystem.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.cpp" />
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Utils\Utils.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Window\Window.cpp" />
     <ClCompile Include="src\Dog\Input\KeyboardController.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -193,11 +192,11 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
     <ClInclude Include="src\Dog\Graphics\Vulkan\Core\SwapChain.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Descriptors\Descriptors.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\FrameInfo.h" />
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Animation.h" />
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Animator.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\Animation.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\Animator.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Models\assimpGlmHelper.h" />
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Bone.h" />
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\BoneInfo.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\Bone.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\BoneInfo.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Texture\ImGuiTexture.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Mesh.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Model.h" />
@@ -208,7 +207,6 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
     <ClInclude Include="src\Dog\Graphics\Vulkan\Renderer.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Systems\PointLightSystem.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.h" />
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Utils\Utils.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Window\Window.h" />
     <ClInclude Include="src\Dog\Input\KeyboardController.h" />
     <ClInclude Include="src\Engine.h" />

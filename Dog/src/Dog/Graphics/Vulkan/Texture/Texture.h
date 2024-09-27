@@ -1,42 +1,46 @@
 #pragma once
 
-class LveDevice;
+namespace Dog {
 
-class Texture {
-public:
-    Texture(LveDevice& device, const std::string& filepath);
-    Texture(LveDevice& device, const std::string& filepath, const unsigned char* textureData, int textureSize);
-    ~Texture();
+    class Device;
 
-    Texture(const Texture&) = delete;
-    Texture& operator=(const Texture&) = delete;
+    class Texture {
+    public:
+        Texture(Device& device, const std::string& filepath);
+        Texture(Device& device, const std::string& filepath, const unsigned char* textureData, int textureSize);
+        ~Texture();
 
-    const VkImageView& getImageView() const { return textureImageView; }
-    const VkSampler& getSampler() const { return textureSampler; }
+        Texture(const Texture&) = delete;
+        Texture& operator=(const Texture&) = delete;
 
-    std::string path;
+        const VkImageView& getImageView() const { return textureImageView; }
+        const VkSampler& getSampler() const { return textureSampler; }
 
-private:
-    void createTextureImage(const std::string& filepath);
-    void createTextureImageFromMemory(const unsigned char* textureData, int textureSize);
-    void createTextureImageView();
-    void createTextureSampler();
-    void GenerateMipmaps(int32_t texWidth, int32_t texHeight);
+        std::string path;
 
-    void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VmaMemoryUsage memoryUsage);
+    private:
+        void createTextureImage(const std::string& filepath);
+        void createTextureImageFromMemory(const unsigned char* textureData, int textureSize);
+        void createTextureImageView();
+        void createTextureSampler();
+        void GenerateMipmaps(int32_t texWidth, int32_t texHeight);
 
-    VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels);
-    void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels);
-    void copyBufferToImage(
-        VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
+        void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VmaMemoryUsage memoryUsage);
+
+        VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels);
+        void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels);
+        void copyBufferToImage(
+            VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
 
 
-    LveDevice& lveDevice;
-    VkImage textureImage;
-    VmaAllocation textureImageAllocation;
-    VkImageView textureImageView;
-    VkSampler textureSampler;
+        Device& device;
+        VkImage textureImage;
+        VmaAllocation textureImageAllocation;
+        VkImageView textureImageView;
+        VkSampler textureSampler;
 
-    uint32_t mipLevels;
+        uint32_t mipLevels;
 
-};
+    };
+
+} // namespace Dog

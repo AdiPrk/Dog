@@ -42,19 +42,19 @@
     <ClCompile Include="src\Dog\Graphics\Vulkan\Descriptors\Descriptors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Animation.cpp">
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Animator.cpp">
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\Animator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dog\Graphics\Vulkan\Models\assimpGlmHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\Bone.cpp">
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\Bone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Models\BoneInfo.cpp">
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Animation\BoneInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dog\Graphics\Vulkan\Texture\ImGuiTexture.cpp">
@@ -82,9 +82,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Dog\Graphics\Vulkan\Utils\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dog\Graphics\Vulkan\Window\Window.cpp">
@@ -149,19 +146,19 @@
     <ClInclude Include="src\Dog\Graphics\Vulkan\Descriptors\Descriptors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Animation.h">
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Animator.h">
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\Animator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dog\Graphics\Vulkan\Models\assimpGlmHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\Bone.h">
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\Bone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Models\BoneInfo.h">
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Animation\BoneInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dog\Graphics\Vulkan\Texture\ImGuiTexture.h">
@@ -189,9 +186,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dog\Graphics\Vulkan\Utils\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dog\Graphics\Vulkan\Window\Window.h">

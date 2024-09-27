@@ -42,10 +42,10 @@ public:
     glm::vec3 color{};
     TransformComponent transform{};
 
-    // Optional pointer components
-    std::shared_ptr<Model> model{};
     std::unique_ptr<PointLightComponent> pointLight = nullptr;
-    uint32_t textureIndex = 999;
+
+    uint32_t model = INVALID_MODEL_INDEX;
+    uint32_t textureIndex = INVALID_TEXTURE_INDEX;
 
 private:
     GameObject(id_t objId) : id{ objId } {}

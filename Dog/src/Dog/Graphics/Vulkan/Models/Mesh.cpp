@@ -1,108 +1,111 @@
 #include <PCH/pch.h>
 #include "Mesh.h"
-#include "../Utils/Utils.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
-void Mesh::createVertexBuffers(LveDevice& device) {
-    vertexCount = static_cast<uint32_t>(vertices.size());
-    assert(vertexCount >= 3 && "Vertex count must be at least 3");
-    VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
-    uint32_t vertexSize = sizeof(vertices[0]);
+namespace Dog {
 
-    Buffer stagingBuffer{
-        device,
-        vertexSize,
-        vertexCount,
-        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-        VMA_MEMORY_USAGE_CPU_ONLY,
-    };
+    void Mesh::createVertexBuffers(Device& device) {
+        vertexCount = static_cast<uint32_t>(vertices.size());
+        assert(vertexCount >= 3 && "Vertex count must be at least 3");
+        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
+        uint32_t vertexSize = sizeof(vertices[0]);
 
-    stagingBuffer.map();
-    stagingBuffer.writeToBuffer((void*)vertices.data());
+        Buffer stagingBuffer{
+            device,
+            vertexSize,
+            vertexCount,
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+            VMA_MEMORY_USAGE_CPU_ONLY,
+        };
 
-    vertexBuffer = std::make_unique<Buffer>(
-        device,
-        vertexSize,
-        vertexCount,
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE);
+        stagingBuffer.map();
+        stagingBuffer.writeToBuffer((void*)vertices.data());
 
-    device.copyBuffer(stagingBuffer.getBuffer(), vertexBuffer->getBuffer(), bufferSize);
-}
+        vertexBuffer = std::make_unique<Buffer>(
+            device,
+            vertexSize,
+            vertexCount,
+            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+            VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE);
 
-void Mesh::createIndexBuffers(LveDevice& device) {
-    indexCount = static_cast<uint32_t>(indices.size());
-    hasIndexBuffer = indexCount > 0;
-
-    if (!hasIndexBuffer) {
-        return;
+        device.copyBuffer(stagingBuffer.getBuffer(), vertexBuffer->getBuffer(), bufferSize);
     }
 
-    VkDeviceSize bufferSize = sizeof(indices[0]) * indexCount;
-    uint32_t indexSize = sizeof(indices[0]);
+    void Mesh::createIndexBuffers(Device& device) {
+        indexCount = static_cast<uint32_t>(indices.size());
+        hasIndexBuffer = indexCount > 0;
 
-    Buffer stagingBuffer{
-        device,
-        indexSize,
-        indexCount,
-        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-        VMA_MEMORY_USAGE_CPU_ONLY,
-    };
+        if (!hasIndexBuffer) {
+            return;
+        }
 
-    stagingBuffer.map();
-    stagingBuffer.writeToBuffer((void*)indices.data());
+        VkDeviceSize bufferSize = sizeof(indices[0]) * indexCount;
+        uint32_t indexSize = sizeof(indices[0]);
 
-    indexBuffer = std::make_unique<Buffer>(
-        device,
-        indexSize,
-        indexCount,
-        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE);
+        Buffer stagingBuffer{
+            device,
+            indexSize,
+            indexCount,
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+            VMA_MEMORY_USAGE_CPU_ONLY,
+        };
 
-    device.copyBuffer(stagingBuffer.getBuffer(), indexBuffer->getBuffer(), bufferSize);
-}
+        stagingBuffer.map();
+        stagingBuffer.writeToBuffer((void*)indices.data());
 
+        indexBuffer = std::make_unique<Buffer>(
+            device,
+            indexSize,
+            indexCount,
+            VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+            VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE);
 
-void Mesh::bind(VkCommandBuffer commandBuffer) {
-    VkBuffer buffers[] = { vertexBuffer->getBuffer() };
-    VkDeviceSize offsets[] = { 0 };
-    vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
-
-    if (hasIndexBuffer) {
-        vkCmdBindIndexBuffer(commandBuffer, indexBuffer->getBuffer(), 0, VK_INDEX_TYPE_UINT32);
+        device.copyBuffer(stagingBuffer.getBuffer(), indexBuffer->getBuffer(), bufferSize);
     }
-}
 
-void Mesh::draw(VkCommandBuffer commandBuffer) {
-    if (hasIndexBuffer) {
-        vkCmdDrawIndexed(commandBuffer, indexCount, 1, 0, 0, 0);
+
+    void Mesh::bind(VkCommandBuffer commandBuffer) {
+        VkBuffer buffers[] = { vertexBuffer->getBuffer() };
+        VkDeviceSize offsets[] = { 0 };
+        vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
+
+        if (hasIndexBuffer) {
+            vkCmdBindIndexBuffer(commandBuffer, indexBuffer->getBuffer(), 0, VK_INDEX_TYPE_UINT32);
+        }
     }
-    else {
-        vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
+
+    void Mesh::draw(VkCommandBuffer commandBuffer) {
+        if (hasIndexBuffer) {
+            vkCmdDrawIndexed(commandBuffer, indexCount, 1, 0, 0, 0);
+        }
+        else {
+            vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
+        }
     }
-}
 
-std::vector<VkVertexInputBindingDescription> Vertex::getBindingDescriptions() {
-    std::vector<VkVertexInputBindingDescription> bindingDescriptions(1);
-    bindingDescriptions[0].binding = 0;
-    bindingDescriptions[0].stride = sizeof(Vertex);
-    bindingDescriptions[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-    return bindingDescriptions;
-}
+    std::vector<VkVertexInputBindingDescription> Vertex::getBindingDescriptions() {
+        std::vector<VkVertexInputBindingDescription> bindingDescriptions(1);
+        bindingDescriptions[0].binding = 0;
+        bindingDescriptions[0].stride = sizeof(Vertex);
+        bindingDescriptions[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        return bindingDescriptions;
+    }
 
-std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions() {
-    std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
+    std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions() {
+        std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
 
-    attributeDescriptions.push_back({ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position) });
-    attributeDescriptions.push_back({ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) });
-    attributeDescriptions.push_back({ 2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal) });
-    attributeDescriptions.push_back({ 3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv) });
+        attributeDescriptions.push_back({ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position) });
+        attributeDescriptions.push_back({ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) });
+        attributeDescriptions.push_back({ 2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal) });
+        attributeDescriptions.push_back({ 3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv) });
 
-    attributeDescriptions.push_back({ 4, 0, VK_FORMAT_R32G32B32A32_SINT, offsetof(Vertex, mBoneIDs) });
-    attributeDescriptions.push_back({ 5, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, mWeights) });
+        attributeDescriptions.push_back({ 4, 0, VK_FORMAT_R32G32B32A32_SINT, offsetof(Vertex, mBoneIDs) });
+        attributeDescriptions.push_back({ 5, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, mWeights) });
 
-    return attributeDescriptions;
-}
+        return attributeDescriptions;
+    }
+
+} // namespace Dog
