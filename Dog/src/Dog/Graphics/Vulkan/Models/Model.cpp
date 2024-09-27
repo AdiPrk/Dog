@@ -277,7 +277,8 @@ namespace Dog {
     void Model::processMaterials(aiMesh* mesh, const aiScene* scene, Mesh& newMesh, TextureLibrary& textureLibrary, const std::string& filepath) {
         // Loop through materials (textures)
         if (scene->HasMaterials()) {
-            auto& newMaterial = newMesh.material;
+            // auto& newMaterial = newMesh.material;
+            
             std::string directory = filepath.substr(0, filepath.find_last_of('/'));
 
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];

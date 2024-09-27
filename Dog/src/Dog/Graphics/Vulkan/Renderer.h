@@ -3,8 +3,16 @@
 #include "Core/Device.h"
 #include "Core/SwapChain.h"
 #include "Window/Window.h"
+#include "Entities/GameObject.h"
 
 namespace Dog {
+
+    class TextureLibrary;
+    class ModelLibrary;
+    class SimpleRenderSystem;
+    class PointLightSystem;
+    class DescriptorPool;
+    class KeyboardMovementController;
 
     class Renderer {
     public:
@@ -13,6 +21,10 @@ namespace Dog {
 
         Renderer(const Renderer&) = delete;
         Renderer& operator=(const Renderer&) = delete;
+
+        void Init();
+        void Render(float dt, GameObject::Map& gameObjects);
+        void Exit();
 
         VkRenderPass getSwapChainRenderPass() const { return lveSwapChain->getRenderPass(); }
         float getAspectRatio() const { return lveSwapChain->extentAspectRatio(); }
@@ -40,7 +52,7 @@ namespace Dog {
         void freeCommandBuffers();
         void recreateSwapChain();
 
-        Window& lveWindow;
+        Window& m_Window;
         Device& device;
         std::unique_ptr<SwapChain> lveSwapChain;
         std::vector<VkCommandBuffer> commandBuffers;
@@ -49,6 +61,14 @@ namespace Dog {
         int currentFrameIndex{ 0 };
         bool isFrameStarted{ false };
 
+        std::unique_ptr<DescriptorPool> globalPool{};
+        std::unique_ptr<SimpleRenderSystem> simpleRenderSystem;
+        std::unique_ptr<PointLightSystem> pointLightSystem;
+        std::unique_ptr<KeyboardMovementController> cameraController;
+
+        std::vector<VkDescriptorSet> globalDescriptorSets;
+        std::vector<std::unique_ptr<Buffer>> uboBuffers;
+        std::vector<std::unique_ptr<Buffer>> bonesUboBuffers;
     };
 
 }

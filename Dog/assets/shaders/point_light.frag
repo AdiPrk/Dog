@@ -25,8 +25,15 @@ layout(push_constant) uniform Push {
 
 void main() {
   float dis = sqrt(dot(fragOffset, fragOffset));
+  
+  vec3 clr = push.color.xyz;
+
   if (dis >= 1.0) {
     discard;
   }
-  outColor = vec4(push.color.xyz, 1.0);
+  if (dis > 0.95) {
+    clr = vec3(0.f);
+  }
+
+  outColor = vec4(clr, 1.0);
 }

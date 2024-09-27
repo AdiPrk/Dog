@@ -2,13 +2,20 @@
 #include "Engine.h"
 
 int main() {
-    Dog::Engine engine{};
+    Dog::EngineSpec specs;
+    specs.name = "Woof";
+    specs.width = 1280;
+    specs.height = 720;
+    specs.fps = 60;
+
+    Dog::Engine& Engine = Dog::Engine::Create(specs);
 
     try {
-        engine.run();
+        Engine.Run();
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << '\n';
+        std::cin.get(); // Wait here
         return EXIT_FAILURE;
     }
 

@@ -1,10 +1,57 @@
 #include <PCH/pch.h>
 #include "Renderer.h"
+#include "Systems/SimpleRenderSystem.h"
+#include "Systems/PointLightSystem.h"
+#include "Camera.h"
+#include "Descriptors/Descriptors.h"
+#include "Texture/TextureLibrary.h"
+#include "Models/ModelLibrary.h"
+#include "glslang/Public/ShaderLang.h"
+#include "Core/SwapChain.h"
+#include "Input/KeyboardController.h"
+#include "Entities/GameObject.h"
+#include "Input/input.h"
+
+#include "Engine.h"
+
+namespace ImGui {
+    /**
+     * Draw an ImGui::Image using Vulkan.
+     *
+     * \param mx: The texture manager to use.
+     * \param index: The index of the texture to use. Index depends on the order in which images and models are loaded.
+     * \param image_size: The size of the image.
+     */
+    void VulkanImage(Dog::TextureLibrary& mx, const size_t& index, const ImVec2& image_size, const ImVec2& uv0 = ImVec2(0, 1), const ImVec2& uv1 = ImVec2(1, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1), const ImVec4& border_col = ImVec4(0, 0, 0, 0))
+    {
+        auto ds = mx.GetDescriptorSetByIndex(index);
+        ImGui::Image(reinterpret_cast<void*>(ds), image_size, uv0, uv1, tint_col, border_col);
+    }
+
+    /**
+     * Draw an ImGui::Image using Vulkan.
+     *
+     * \param mx: The texture manager to use.
+     * \param texturePath: The path to the texture to use.
+     * \param image_size: The size of the image.
+     */
+    void VulkanImage(Dog::TextureLibrary& mx, const std::string& texturePath, const ImVec2& image_size, const ImVec2& uv0 = ImVec2(0, 1), const ImVec2& uv1 = ImVec2(1, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1), const ImVec4& border_col = ImVec4(0, 0, 0, 0))
+    {
+        auto ds = mx.GetDescriptorSet(texturePath);
+        ImGui::Image(reinterpret_cast<void*>(ds), image_size, uv0, uv1, tint_col, border_col);
+    }
+}
+
 
 namespace Dog {
 
     Renderer::Renderer(Window& window, Device& device)
-        : lveWindow{ window }, device{ device } {
+        : m_Window{ window }
+        , device{ device }
+        , globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT)
+        , uboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT)
+        , bonesUboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT)
+    {
         recreateSwapChain();
         createCommandBuffers();
 
@@ -46,7 +93,7 @@ namespace Dog {
         // init imgui
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGui_ImplGlfw_InitForVulkan(lveWindow.getGLFWwindow(), true);
+        ImGui_ImplGlfw_InitForVulkan(m_Window.getGLFWwindow(), true);
         ImGui_ImplVulkan_InitInfo init_info = {};
         init_info.Instance = device.getInstance();
         init_info.PhysicalDevice = device.getPhysicalDevice();
@@ -63,6 +110,17 @@ namespace Dog {
         init_info.CheckVkResultFn = nullptr;
         ImGui_ImplVulkan_Init(&init_info);
 
+        globalPool =
+            DescriptorPool::Builder(device)
+            .setMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT)
+            .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT)
+            .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURE_COUNT)
+            .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT)
+            .build();
+
+        glslang::InitializeProcess();
+
+        Input::Init(m_Window.getGLFWwindow());
     }
 
     Renderer::~Renderer() {
@@ -70,13 +128,206 @@ namespace Dog {
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
 
+        vkDestroyDescriptorSetLayout(device, samplerSetLayout, nullptr);
+        vkDestroyDescriptorPool(device, imGuiDescriptorPool, nullptr);
+
         freeCommandBuffers();
     }
 
+    void Renderer::Init()
+    {
+        auto& textureLibrary = Engine::Get().GetTextureLibrary();
+        auto& modelLibrary = Engine::Get().GetModelLibrary();
+
+        textureLibrary.AddTexture("assets/textures/square.png");
+        textureLibrary.AddTexture("assets/textures/texture.jpg");
+        textureLibrary.AddTexture("assets/textures/dog.png");
+        textureLibrary.AddTexture("assets/textures/viking_room.png");
+        textureLibrary.AddTexture("assets/models/textures/Book.png");
+
+        modelLibrary.AddModel("assets/models/quad.obj");
+        modelLibrary.AddModel("assets/models/charles.glb");
+        modelLibrary.AddModel("assets/models/AlisaMikhailovna.fbx");
+        modelLibrary.AddModel("assets/models/Mon_BlackDragon31_Skeleton.FBX");
+        modelLibrary.AddModel("assets/models/Book.fbx");
+        modelLibrary.AddModel("assets/models/smooth_vase.obj");
+        modelLibrary.AddModel("assets/models/viking_room.obj");
+
+        for (size_t i = 0; i < uboBuffers.size(); i++) {
+            uboBuffers[i] = std::make_unique<Buffer>(
+                device,
+                sizeof(GlobalUbo),
+                1,
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                VMA_MEMORY_USAGE_CPU_ONLY);
+            uboBuffers[i]->map();
+        }
+
+        for (size_t i = 0; i < bonesUboBuffers.size(); i++) {
+            bonesUboBuffers[i] = std::make_unique<Buffer>(
+                device,
+                sizeof(BonesUbo),
+                1,
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                VMA_MEMORY_USAGE_CPU_ONLY);
+            bonesUboBuffers[i]->map();
+        }
+
+        auto globalSetLayout =
+            DescriptorSetLayout::Builder(device)
+            .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)
+            .addBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, MAX_TEXTURE_COUNT)
+            .addBinding(2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)
+            .build();
+
+        // Atleast 1 texture must be added by this point, or uh-oh.
+        // Set up image infos for the descriptor set
+        std::vector<VkDescriptorImageInfo> imageInfos(MAX_TEXTURE_COUNT);
+        for (size_t j = 0; j < MAX_TEXTURE_COUNT; j++) {
+            if (j < textureLibrary.getTextureCount()) {
+                imageInfos[j].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageInfos[j].imageView = textureLibrary.getTextureByIndex(j).getImageView();
+                imageInfos[j].sampler = textureLibrary.getTextureByIndex(j).getSampler();
+            }
+            else {
+                imageInfos[j].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageInfos[j].imageView = textureLibrary.getTextureByIndex(0).getImageView();
+                imageInfos[j].sampler = textureLibrary.getTextureByIndex(0).getSampler();
+            }
+        }
+
+        // Create descriptor sets
+        for (size_t i = 0; i < globalDescriptorSets.size(); i++) {
+            auto bufferInfo = uboBuffers[i]->descriptorInfo();
+            auto boneBufferInfo = bonesUboBuffers[i]->descriptorInfo();
+
+            DescriptorWriter(*globalSetLayout, *globalPool)
+                .writeBuffer(0, &bufferInfo)
+                .writeImage(1, imageInfos.data(), static_cast<uint32_t>(imageInfos.size()))
+                .writeBuffer(2, &boneBufferInfo)
+                .build(globalDescriptorSets[i]);
+        }
+
+        simpleRenderSystem = std::make_unique<SimpleRenderSystem>(
+			device,
+			getSwapChainRenderPass(),
+			globalSetLayout->getDescriptorSetLayout(),
+			textureLibrary,
+			modelLibrary);
+
+        pointLightSystem = std::make_unique<PointLightSystem>(
+            device,
+            getSwapChainRenderPass(),
+            globalSetLayout->getDescriptorSetLayout());       
+
+        // Temporary camera controller
+        cameraController = std::make_unique<KeyboardMovementController>();
+    }
+
+    void Renderer::Render(float dt, GameObject::Map& gameObjects)
+    {
+        auto& textureLibrary = Engine::Get().GetTextureLibrary();
+        auto& modelLibrary = Engine::Get().GetModelLibrary();
+
+        // should become a component of the viewer object
+        static Camera camera{};
+
+        // Make a viewer object which will hold the camera
+        // should become an entity once that exists
+        static GameObject viewerObject = GameObject::createGameObject();
+        // viewerObject.transform.translation.z = -2.5f;
+
+
+        cameraController->moveInPlaneXZ(m_Window.getGLFWwindow(), dt, viewerObject);
+        camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
+
+        // Set the camera's projection
+        float aspect = getAspectRatio();
+        camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 8000.f);
+
+        // Start the frame
+        if (auto commandBuffer = beginFrame()) {
+            ImGui_ImplVulkan_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            // FPS
+            ImGui::BeginMainMenuBar();
+
+            char fpsText[32];
+            sprintf_s(fpsText, "FPS: %.1f", ImGui::GetIO().Framerate);
+
+            ImVec2 textSize = ImGui::CalcTextSize(fpsText, NULL, true);
+            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - textSize.x - 10);
+            ImGui::Text(fpsText);
+
+            ImGui::EndMainMenuBar();
+
+            ImGui::ShowDemoWindow();
+            {
+                // draw an imgui image
+                ImGui::Begin("Texture");
+
+                // loop through all textures and draw them
+                ImGui::VulkanImage(textureLibrary, "assets/textures/texture.jpg", ImVec2(256, 256));
+
+                for (size_t i = 1; i < textureLibrary.getTextureCount(); i++) {
+                    ImGui::VulkanImage(textureLibrary, i, ImVec2(256, 256));
+                }
+
+                ImGui::End();
+            }
+
+            int frameIndex = getFrameIndex();
+            FrameInfo frameInfo{
+                frameIndex,
+                dt,
+                commandBuffer,
+                camera,
+                globalDescriptorSets[frameIndex],
+                gameObjects };
+
+            // update
+            GlobalUbo ubo{};
+            ubo.projection = camera.getProjection();
+            ubo.view = camera.getView();
+            ubo.inverseView = camera.getInverseView();
+            pointLightSystem->update(frameInfo, ubo);
+            uboBuffers[frameIndex]->writeToBuffer(&ubo);
+            uboBuffers[frameIndex]->flush();
+
+            // animator->UpdateAnimation(frameTime);
+            /*BonesUbo bonesUbo{};
+            auto transforms = animator->GetFinalBoneMatrices();
+            for (size_t i = 0; i < transforms.size(); i++) {
+                bonesUbo.finalBonesMatrices[i] = transforms[i];
+            }
+            bonesUboBuffers[frameIndex]->writeToBuffer(&bonesUbo);
+            bonesUboBuffers[frameIndex]->flush();*/
+
+            // render
+            beginSwapChainRenderPass(commandBuffer);
+            simpleRenderSystem->renderGameObjects(frameInfo);
+            pointLightSystem->render(frameInfo);
+
+            ImGui::Render();
+            ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+
+            endSwapChainRenderPass(commandBuffer);
+            endFrame();
+        }
+    }
+
+    void Renderer::Exit()
+    {
+        // Wait until the device is idle before cleaning up resources
+		vkDeviceWaitIdle(device);
+    }
+
     void Renderer::recreateSwapChain() {
-        auto extent = lveWindow.getExtent();
+        auto extent = m_Window.getExtent();
         while (extent.width == 0 || extent.height == 0) {
-            extent = lveWindow.getExtent();
+            extent = m_Window.getExtent();
             glfwWaitEvents();
         }
         vkDeviceWaitIdle(device);
@@ -154,8 +405,8 @@ namespace Dog {
 
         auto result = lveSwapChain->submitCommandBuffers(&commandBuffer, &currentImageIndex);
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ||
-            lveWindow.wasWindowResized()) {
-            lveWindow.resetWindowResizedFlag();
+            m_Window.wasWindowResized()) {
+            m_Window.resetWindowResizedFlag();
             recreateSwapChain();
         }
         else if (result != VK_SUCCESS) {

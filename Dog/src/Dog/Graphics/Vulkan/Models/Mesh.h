@@ -5,15 +5,7 @@
 
 namespace Dog {
 
-    struct Material {
-        uint32_t diffuseTextures;
-        uint32_t specularTextures;
-        uint32_t normalMaps;
-        uint32_t heightMaps;
-        // Add more texture types here later
-
-        float shininess = 32.0f; // Default value
-    };
+    struct MaterialComponent;
 
     struct Vertex {
         glm::vec3 position{};
@@ -26,11 +18,6 @@ namespace Dog {
 
         static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
         static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
-
-        bool operator==(const Vertex& other) const {
-            return position == other.position && color == other.color && normal == other.normal &&
-                uv == other.uv;
-        }
     };
 
     class Mesh {
@@ -53,7 +40,8 @@ namespace Dog {
         std::vector<uint32_t> indices{};
 
         uint32_t textureIndex = 999;
-        Material material{};
+        
+        // MaterialComponent materialComponent{};
     };
 
 } // namespace Dog

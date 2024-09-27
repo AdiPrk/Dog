@@ -31,7 +31,7 @@ namespace Dog {
 			return static_cast<uint32_t>(modelIndex);
 		}
 		else {
-			return INVALID_MODEL_INDEX;
+			return m_ModelMap[modelPath];
 		}
 	}
 
@@ -41,7 +41,8 @@ namespace Dog {
 			return m_ModelMap[modelPath];
 		}
 		else {
-			return INVALID_MODEL_INDEX;
+			// try adding it
+			return AddModel(modelPath);
 		}
 	}
 

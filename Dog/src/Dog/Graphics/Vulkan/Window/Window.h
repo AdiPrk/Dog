@@ -19,6 +19,9 @@ namespace Dog {
 
 		void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 
+		const int& GetWidth() const { return width; }
+		const int& GetHeight() const { return height; }
+
 	private:
 		static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 		void initWindow();

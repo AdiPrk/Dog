@@ -57,14 +57,14 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH/pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Include;$(ProjectDir)externals\glfw\include;$(ProjectDir)externals\glm;$(ProjectDir)externals\stb_image\stb;$(ProjectDir)externals\tiny_obj_loader;$(ProjectDir)externals\vk_extensions;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\glslang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Include;$(ProjectDir)externals\glfw\include;$(ProjectDir)externals\glm;$(ProjectDir)externals\stb_image\stb;$(ProjectDir)externals\tiny_obj_loader;$(ProjectDir)externals\vk_extensions;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\glslang\include;$(ProjectDir)externals\spdlog\include;$(ProjectDir)externals\entt\include;$(ProjectDir)externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Lib;$(ProjectDir)externals\glfw\lib-vc2022;$(ProjectDir)externals\assimp\lib;$(ProjectDir)externals\glslang\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3_mt.lib;glslangd.lib;SPIRVd.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Lib;$(ProjectDir)externals\glfw\lib-vc2022;$(ProjectDir)externals\assimp\lib;$(ProjectDir)externals\glslang\lib;$(ProjectDir)externals\spdlog\lib;$(ProjectDir)externals\yaml-cpp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3_mt.lib;spdlog.lib;glslangd.lib;SPIRVd.lib;assimp-vc143-mtd.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /Y /D "$(ProjectDir)externals\assimp\assimp-vc143-mtd.dll" "$(TargetDir)"
@@ -85,15 +85,16 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlibd1.dll" "$(TargetDir)"
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH/pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Include;$(ProjectDir)externals\glfw\include;$(ProjectDir)externals\glm;$(ProjectDir)externals\stb_image\stb;$(ProjectDir)externals\tiny_obj_loader;$(ProjectDir)externals\vk_extensions;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\glslang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Include;$(ProjectDir)externals\glfw\include;$(ProjectDir)externals\glm;$(ProjectDir)externals\stb_image\stb;$(ProjectDir)externals\tiny_obj_loader;$(ProjectDir)externals\vk_extensions;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\glslang\include;$(ProjectDir)externals\spdlog\include;$(ProjectDir)externals\entt\include;$(ProjectDir)externals\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Lib;$(ProjectDir)externals\glfw\lib-vc2022;$(ProjectDir)externals\assimp\lib;$(ProjectDir)externals\glslang\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3_mt.lib;glslang.lib;SPIRV.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)externals\VulkanSDK\1.3.290.0\Lib;$(ProjectDir)externals\glfw\lib-vc2022;$(ProjectDir)externals\assimp\lib;$(ProjectDir)externals\glslang\lib;$(ProjectDir)externals\spdlog\lib;$(ProjectDir)externals\yaml-cpp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3_mt.lib;spdlog.lib;glslang.lib;SPIRV.lib;assimp-vc143-mt.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /Y /D "$(ProjectDir)externals\assimp\assimp-vc143-mt.dll" "$(TargetDir)"
@@ -141,7 +142,9 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Dog\Assets\UUID\UUID.cpp" />
     <ClCompile Include="src\Dog\Entities\GameObject.cpp" />
+    <ClCompile Include="src\Dog\Events\Event.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Buffers\Buffer.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Camera.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Core\Device.cpp" />
@@ -162,9 +165,16 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
     <ClCompile Include="src\Dog\Graphics\Vulkan\Renderer.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Systems\PointLightSystem.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.cpp" />
+    <ClCompile Include="src\Dog\Graphics\Vulkan\Window\FrameRate.cpp" />
     <ClCompile Include="src\Dog\Graphics\Vulkan\Window\Window.cpp" />
+    <ClCompile Include="src\Dog\Input\input.cpp" />
     <ClCompile Include="src\Dog\Input\KeyboardController.cpp" />
-    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\Dog\Engine.cpp" />
+    <ClCompile Include="src\Dog\Logger\Logger.cpp" />
+    <ClCompile Include="src\Dog\Scene\Entity\Components.cpp" />
+    <ClCompile Include="src\Dog\Scene\Entity\Entity.cpp" />
+    <ClCompile Include="src\Dog\Scene\Scene.cpp" />
+    <ClCompile Include="src\Dog\Scene\SceneManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\PCH\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -185,7 +195,9 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Dog\Assets\UUID\UUID.h" />
     <ClInclude Include="src\Dog\Entities\GameObject.h" />
+    <ClInclude Include="src\Dog\Events\Event.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Buffers\Buffer.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Camera.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Core\Device.h" />
@@ -207,9 +219,17 @@ xcopy /Y /D "$(ProjectDir)externals\assimp\zlib1.dll" "$(TargetDir)"
     <ClInclude Include="src\Dog\Graphics\Vulkan\Renderer.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Systems\PointLightSystem.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Systems\SimpleRenderSystem.h" />
+    <ClInclude Include="src\Dog\Graphics\Vulkan\Window\FrameRate.h" />
     <ClInclude Include="src\Dog\Graphics\Vulkan\Window\Window.h" />
+    <ClInclude Include="src\Dog\Input\input.h" />
+    <ClInclude Include="src\Dog\Input\inputMap.h" />
     <ClInclude Include="src\Dog\Input\KeyboardController.h" />
-    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\Dog\Engine.h" />
+    <ClInclude Include="src\Dog\Logger\Logger.h" />
+    <ClInclude Include="src\Dog\Scene\Entity\Components.h" />
+    <ClInclude Include="src\Dog\Scene\Entity\Entity.h" />
+    <ClInclude Include="src\Dog\Scene\Scene.h" />
+    <ClInclude Include="src\Dog\Scene\SceneManager.h" />
     <ClInclude Include="src\PCH\pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

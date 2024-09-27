@@ -1,5 +1,9 @@
 #include <PCH/pch.h>
 #include "SimpleRenderSystem.h"
+#include "Engine.h"
+#include "Scene/SceneManager.h"
+#include "Scene/Scene.h"
+#include "Scene/Entity/Components.h"
 
 namespace Dog {
 
@@ -100,7 +104,37 @@ namespace Dog {
             0,
             nullptr);
 
-        for (auto& kv : frameInfo.gameObjects) {
+        Scene* scene = SceneManager::GetCurrentScene();
+        entt::registry& registry = scene->GetRegistry();
+
+        registry.view<TransformComponent, ModelComponent>().each
+        ([&](const auto& entity, const TransformComponent& transform, const ModelComponent& model)
+            {
+                if (model.modelIndex == INVALID_MODEL_INDEX) return;
+
+                Model* pModel = modelLibrary.GetModelByIndex(model.modelIndex);
+
+                for (auto& mesh : pModel->meshes) {
+                    SimplePushConstantData push{};
+                    push.modelMatrix = transform.mat4();
+                    push.normalMatrix = transform.normalMatrix();
+
+                    push.textureIndex = 0;// mesh.textureIndex;
+
+                    vkCmdPushConstants(
+                        frameInfo.commandBuffer,
+                        pipelineLayout,
+                        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                        0,
+                        sizeof(SimplePushConstantData),
+                        &push);
+
+                    mesh.bind(frameInfo.commandBuffer);
+                    mesh.draw(frameInfo.commandBuffer);
+                }
+            });
+
+        /*for (auto& kv : frameInfo.gameObjects) {
             auto& obj = kv.second;
 
             Model* model;
@@ -132,7 +166,7 @@ namespace Dog {
                 mesh.bind(frameInfo.commandBuffer);
                 mesh.draw(frameInfo.commandBuffer);
             }
-        }
+        }*/
     }
 
 } // namespace Dog

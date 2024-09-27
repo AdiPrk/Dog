@@ -22,13 +22,16 @@ namespace Dog {
 			return INVALID_TEXTURE_INDEX;
 		}
 
-		if (textureMap.find(texturePath) == textureMap.end()) {
-			textureMap[texturePath] = static_cast<uint32_t>(textures.size());
+		if (textureMap.find(texturePath) == textureMap.end()) 
+		{
+			uint32_t textureIndex = static_cast<uint32_t>(textures.size());
+
+			textureMap[texturePath] = textureIndex;
 			textures.push_back(std::make_unique<Texture>(device, texturePath));
 
 			imGuiTextureManager.AddTexture(texturePath, textures.back()->getImageView(), textures.back()->getSampler());
 
-			return static_cast<uint32_t>(textures.size() - 1);
+			return textureIndex;
 		}
 		else {
 			return INVALID_TEXTURE_INDEX;
@@ -46,12 +49,14 @@ namespace Dog {
 		std::string newPath = "BAKED_IN_" + std::to_string(bakedInTextureCount);
 		bakedInTextureCount++;
 
-		textureMap[newPath] = static_cast<uint32_t>(textures.size());
+		uint32_t textureIndex = static_cast<uint32_t>(textures.size());
+
+		textureMap[newPath] = textureIndex;
 		textures.push_back(std::make_unique<Texture>(device, newPath, textureData, textureSize));
 
 		imGuiTextureManager.AddTexture(newPath, textures.back()->getImageView(), textures.back()->getSampler());
 
-		return static_cast<uint32_t>(textures.size() - 1);
+		return textureIndex;
 	}
 
 	uint32_t TextureLibrary::GetTexture(const std::string& texturePath) {
