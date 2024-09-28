@@ -70,12 +70,9 @@ namespace Dog {
 		Entity newEnt(this);
 
 		newEnt.AddComponent<UUID>();
-		TagComponent& tg = newEnt.AddComponent<TagComponent>();
+		TagComponent& tg = newEnt.AddComponent<TagComponent>(name);
 		TransformComponent& tr = newEnt.AddComponent<TransformComponent>();
 		ModelComponent& mc = newEnt.AddComponent<ModelComponent>("assets/models/quad.obj");
-
-		tg.Tag = name;
-		tr.Translation -= tr.Scale * 0.5f;
 
 		return newEnt;
 	}

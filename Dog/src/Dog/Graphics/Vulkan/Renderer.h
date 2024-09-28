@@ -26,9 +26,12 @@ namespace Dog {
         void Render(float dt, GameObject::Map& gameObjects);
         void Exit();
 
-        VkRenderPass getSwapChainRenderPass() const { return lveSwapChain->getRenderPass(); }
-        float getAspectRatio() const { return lveSwapChain->extentAspectRatio(); }
+        VkRenderPass getSwapChainRenderPass() const { return m_SwapChain->getRenderPass(); }
+        float getAspectRatio() const { return m_SwapChain->extentAspectRatio(); }
         bool isFrameInProgress() const { return isFrameStarted; }
+
+        // get swapchain
+        SwapChain& GetSwapChain() { return *m_SwapChain; }
 
         VkCommandBuffer getCurrentCommandBuffer() const {
             assert(isFrameStarted && "Cannot get command buffer when frame not in progress");
@@ -45,8 +48,6 @@ namespace Dog {
         void beginSwapChainRenderPass(VkCommandBuffer commandBuffer);
         void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
 
-        VkDescriptorPool imGuiDescriptorPool;
-        VkDescriptorSetLayout samplerSetLayout;
     private:
         void createCommandBuffers();
         void freeCommandBuffers();
@@ -54,7 +55,7 @@ namespace Dog {
 
         Window& m_Window;
         Device& device;
-        std::unique_ptr<SwapChain> lveSwapChain;
+        std::unique_ptr<SwapChain> m_SwapChain;
         std::vector<VkCommandBuffer> commandBuffers;
 
         uint32_t currentImageIndex;

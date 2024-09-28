@@ -8,6 +8,7 @@ namespace Dog {
 
     Model::Model(Device& device, const std::string& filePath, TextureLibrary& textureLibrary)
         : device{ device }
+        , path(filePath)
     {
         loadMeshes(filePath, textureLibrary);
 
@@ -19,21 +20,14 @@ namespace Dog {
 
     Model::~Model() {}
 
-    std::string aiTexturePathToNLEPath(const aiString& texturePath, const std::string& directory) {
+    std::string aiTexturePathToNLEPath(const aiString& texturePath) {
         std::string textureFilepath = texturePath.C_Str();
 
         textureFilepath.erase(0, textureFilepath.find_first_not_of("./\\"));
+        textureFilepath.erase(0, textureFilepath.find_last_of("/\\") + 1);
 
-        std::string textureFullpath;
-
-        // if texture filepath doesn't start with textures/ or directoroy doesn't end with textures
-        if (textureFilepath.find("textures") == std::string::npos && directory.find("textures") == std::string::npos) {
-            textureFullpath = directory + "/textures/" + textureFilepath;
-        }
-        else {
-            textureFullpath = directory + "/" + textureFilepath;
-        }
-
+        std::string textureFullpath = "assets/models/ModelTextures/" + textureFilepath;
+ 
         return textureFullpath;
     }
 
@@ -278,9 +272,6 @@ namespace Dog {
         // Loop through materials (textures)
         if (scene->HasMaterials()) {
             // auto& newMaterial = newMesh.material;
-            
-            std::string directory = filepath.substr(0, filepath.find_last_of('/'));
-
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
             // log texture type of all materials
@@ -312,7 +303,7 @@ namespace Dog {
                     // std::cout << ">  Loaded DIFFUSE texture from memory successfully!" << std::endl;
                 }
                 else {
-                    std::string textureFullpath = aiTexturePathToNLEPath(texturePath, directory);
+                    std::string textureFullpath = aiTexturePathToNLEPath(texturePath);
 
                     textureLibrary.AddTexture(textureFullpath);
                     newMesh.textureIndex = textureLibrary.GetTexture(textureFullpath);

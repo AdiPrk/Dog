@@ -3,21 +3,18 @@
 #include "../Core/Device.h"
 #include "TextureLibrary.h"
 #include "../Renderer.h"
+#include "Engine.h"
+#include "Graphics/Editor/Editor.h"
 
 namespace Dog {
 
-    ImGuiTextureManager::ImGuiTextureManager(Device& device, Renderer& renderer)
+    ImGuiTextureManager::ImGuiTextureManager(Device& device)
         : device(device)
-        , lveRenderer(renderer)
     {
     }
 
     ImGuiTextureManager::~ImGuiTextureManager()
     {
-        for (auto& descriptor : descriptorMap)
-        {
-            vkFreeDescriptorSets(device, lveRenderer.imGuiDescriptorPool, 1, &descriptor.second);
-        }
     }
 
     VkDescriptorSet ImGuiTextureManager::CreateDescriptorSet(const VkImageView& imageView, const VkSampler& sampler) {
@@ -26,9 +23,9 @@ namespace Dog {
         // Allocate the descriptor set
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = lveRenderer.imGuiDescriptorPool;
+        allocInfo.descriptorPool = Engine::Get().GetEditor().imGuiDescriptorPool;
         allocInfo.descriptorSetCount = 1;
-        allocInfo.pSetLayouts = &lveRenderer.samplerSetLayout;
+        allocInfo.pSetLayouts = &Engine::Get().GetEditor().samplerSetLayout;
 
         if (vkAllocateDescriptorSets(device, &allocInfo, &descriptorSet) != VK_SUCCESS) {
             throw std::runtime_error("Failed to allocate descriptor set!");

@@ -3,10 +3,9 @@
 
 namespace Dog {
 
-	TextureLibrary::TextureLibrary(Device& device, Renderer& renderer)
+	TextureLibrary::TextureLibrary(Device& device)
 		: device(device)
-		, renderer(renderer)
-		, imGuiTextureManager(device, renderer)
+		, imGuiTextureManager(device)
 		, bakedInTextureCount(0)
 	{
 	}

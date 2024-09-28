@@ -147,6 +147,24 @@
     <ClCompile Include="src\Dog\Assets\UUID\UUID.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dog\Graphics\Editor\Editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dog\Graphics\Editor\Windows\EntitiesWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dog\Graphics\Editor\Windows\InspectorWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dog\Graphics\Editor\Windows\AssetsWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dog\Scene\Serializer\SceneSerializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dog\Scene\Serializer\Conversions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\PCH\pch.h">
@@ -288,6 +306,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dog\Assets\UUID\UUID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Graphics\Editor\Editor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Graphics\Editor\Windows\EntitiesWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Graphics\Editor\Windows\InspectorWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Graphics\Editor\Windows\AssetsWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Scene\Serializer\SceneSerializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dog\Scene\Serializer\Conversions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,7 +39,7 @@ namespace Dog {
         std::vector<Vertex> vertices{};
         std::vector<uint32_t> indices{};
 
-        uint32_t textureIndex = 999;
+        uint32_t textureIndex = INVALID_TEXTURE_INDEX;
         
         // MaterialComponent materialComponent{};
     };

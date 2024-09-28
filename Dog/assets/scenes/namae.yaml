@@ -1,0 +1,23 @@
+Scene: namae
+Entities:
+  - Entity: Charles
+    TransformComponent:
+      Translation: [2.5, 0.100000001, 0.5]
+      Rotation: [0, 0, 0]
+      Scale: [-1, -1, -1]
+    ModelComponent:
+      ModelPath: assets/models/charles.glb
+  - Entity: Hai
+    TransformComponent:
+      Translation: [0, 0.100000001, 0.5]
+      Rotation: [1.57000005, 0, 0]
+      Scale: [4, 4, 4]
+    ModelComponent:
+      ModelPath: assets/models/AlisaMikhailovna.fbx
+  - Entity: Unnamed Entity
+    TransformComponent:
+      Translation: [0, 0.100000001, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      ModelPath: assets/models/quad.obj

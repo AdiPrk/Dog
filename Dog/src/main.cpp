@@ -6,12 +6,12 @@ int main() {
     specs.name = "Woof";
     specs.width = 1280;
     specs.height = 720;
-    specs.fps = 60;
+    specs.fps = 60; // <- fps is unused
 
     Dog::Engine& Engine = Dog::Engine::Create(specs);
 
     try {
-        Engine.Run();
+        Engine.Run("namae");
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << '\n';

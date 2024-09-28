@@ -41,31 +41,23 @@ namespace Dog {
 		glm::mat3 normalMatrix() const;
 	};
 
-	struct SpriteComponent
-	{
-		glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
-		std::string texturePath;
-
-		SpriteComponent();
-		SpriteComponent(const SpriteComponent&) = default;
-		SpriteComponent(const glm::vec4& color, const std::string& texturePath);
-	};
-
 	struct MaterialComponent
 	{
-		uint32_t albedoTexture = INVALID_TEXTURE_INDEX;
-		uint32_t normalTexture = INVALID_TEXTURE_INDEX;
+		uint32_t AlbedoTexture = INVALID_TEXTURE_INDEX;
+		uint32_t NormalTexture = INVALID_TEXTURE_INDEX;
 	};
 
 	class Mesh;
 	struct ModelComponent
 	{
-		uint32_t modelIndex = INVALID_MODEL_INDEX;
-		std::string modelPath;
+		uint32_t ModelIndex = INVALID_MODEL_INDEX;
+		std::string ModelPath;
 
 		ModelComponent() = default;
 		ModelComponent(const ModelComponent&);
 		ModelComponent(const std::string& modelPath);
+
+		void SetModel(const std::string& modelPath);
 	};
 
 	/*class OrthographicCamera;

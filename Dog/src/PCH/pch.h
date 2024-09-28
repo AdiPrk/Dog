@@ -56,6 +56,7 @@
 #include <future>
 #include <typeindex>
 #include <random>
+#include <filesystem>
 
 #include "vk_mem_alloc.h"
 

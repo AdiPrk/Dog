@@ -19,6 +19,8 @@ namespace Dog {
 		unsigned fps = 60;			     // The target frames per second.
 	};
 
+	class Editor;
+
 	class Engine {
 	public:
 		static constexpr int WIDTH = 1600;
@@ -39,10 +41,17 @@ namespace Dog {
 			return Create();
 		}
 
+
 		Engine(const Engine&) = delete;
 		Engine& operator=(const Engine&) = delete;
 
-		void Run();
+		/*********************************************************************
+		 * param:  sceneName: The name of the scene to run. (read from assets/scenes)
+		 * 
+		 * brief: Run the engine with the specified scene.
+		 *********************************************************************/
+		void Run(const std::string& sceneName);
+		void Exit();
 
 		// getters
 		Window& GetWindow() { return m_Window; }
@@ -50,6 +59,7 @@ namespace Dog {
 		Renderer& GetRenderer() { return *m_Renderer; }
 		TextureLibrary& GetTextureLibrary() { return textureLibrary; }
 		ModelLibrary& GetModelLibrary() { return modelLibrary; }
+		Editor& GetEditor() { return *m_Editor; }
 
 	private:
 		void loadGameObjects();
@@ -68,8 +78,14 @@ namespace Dog {
 		std::unique_ptr<Animation> animation;
 		std::unique_ptr<Animator> animator;
 
+		// Editor
+		std::unique_ptr<Editor> m_Editor;
+
 		// target fps
 		unsigned fps;
+
+		// running
+		bool m_Running = true;
 	};
 
 } // namespace Dog

@@ -3,7 +3,7 @@
 #include "inputMap.h"
 #include "Dog/Logger/logger.h"
 
-#define DO_INPUT_LOGGING 0
+#define DO_INPUT_LOGGING 1
 
 namespace Dog {
 	
@@ -144,7 +144,7 @@ namespace Dog {
 
 	void Input::keyPressCallback(GLFWwindow* windowPointer, int key, int scanCode, int action, int mod)
 	{
-		ImGui_ImplGlfw_KeyCallback(windowPointer, key, scanCode, action, mod);
+		// ImGui_ImplGlfw_KeyCallback(windowPointer, key, scanCode, action, mod);
 
 		// check if imgui is capturing the keyboard
 		if (keyInputLocked) {
@@ -175,7 +175,7 @@ namespace Dog {
 
 	void Input::mouseButtonCallback(GLFWwindow* windowPointer, int mouseButton, int action, int mod)
 	{
-		ImGui_ImplGlfw_MouseButtonCallback(windowPointer, mouseButton, action, mod);
+		// ImGui_ImplGlfw_MouseButtonCallback(windowPointer, mouseButton, action, mod);
 
 		// check if imgui is capturing the mouse
 		if (mouseButton < 0 || mouseButton > static_cast<int>(Mouse::LAST))
@@ -199,7 +199,7 @@ namespace Dog {
 
 	void Input::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 	{
-		ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+		// ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 
 		if (mouseInputLocked) {
 #if DO_INPUT_LOGGING
@@ -211,7 +211,7 @@ namespace Dog {
 		scrollX += float(xoffset);
 		scrollY += float(yoffset);
 #if DO_INPUT_LOGGING
-		DOG_INFO("Mouse Scrolled: {0}", degree);
+		//DOG_INFO("Mouse Scrolled: {0}", degree);
 #endif
 	}
 

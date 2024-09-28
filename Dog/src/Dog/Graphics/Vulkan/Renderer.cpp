@@ -14,34 +14,7 @@
 
 #include "Engine.h"
 
-namespace ImGui {
-    /**
-     * Draw an ImGui::Image using Vulkan.
-     *
-     * \param mx: The texture manager to use.
-     * \param index: The index of the texture to use. Index depends on the order in which images and models are loaded.
-     * \param image_size: The size of the image.
-     */
-    void VulkanImage(Dog::TextureLibrary& mx, const size_t& index, const ImVec2& image_size, const ImVec2& uv0 = ImVec2(0, 1), const ImVec2& uv1 = ImVec2(1, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1), const ImVec4& border_col = ImVec4(0, 0, 0, 0))
-    {
-        auto ds = mx.GetDescriptorSetByIndex(index);
-        ImGui::Image(reinterpret_cast<void*>(ds), image_size, uv0, uv1, tint_col, border_col);
-    }
-
-    /**
-     * Draw an ImGui::Image using Vulkan.
-     *
-     * \param mx: The texture manager to use.
-     * \param texturePath: The path to the texture to use.
-     * \param image_size: The size of the image.
-     */
-    void VulkanImage(Dog::TextureLibrary& mx, const std::string& texturePath, const ImVec2& image_size, const ImVec2& uv0 = ImVec2(0, 1), const ImVec2& uv1 = ImVec2(1, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1), const ImVec4& border_col = ImVec4(0, 0, 0, 0))
-    {
-        auto ds = mx.GetDescriptorSet(texturePath);
-        ImGui::Image(reinterpret_cast<void*>(ds), image_size, uv0, uv1, tint_col, border_col);
-    }
-}
-
+#include "Graphics/Editor/Editor.h"
 
 namespace Dog {
 
@@ -54,61 +27,6 @@ namespace Dog {
     {
         recreateSwapChain();
         createCommandBuffers();
-
-        VkDescriptorPoolSize pool_sizes[] = { { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
-            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
-            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
-            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 } };
-        VkDescriptorPoolCreateInfo pool_info = {};
-        pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-        pool_info.maxSets = MAX_TEXTURE_COUNT;
-        pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
-        pool_info.pPoolSizes = pool_sizes;
-        vkCreateDescriptorPool(device, &pool_info, VK_NULL_HANDLE, &imGuiDescriptorPool);
-
-        VkDescriptorSetLayoutBinding samplerLayoutBinding{};
-        samplerLayoutBinding.binding = 0;
-        samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        samplerLayoutBinding.descriptorCount = 1;
-        samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        samplerLayoutBinding.pImmutableSamplers = nullptr;  // Use your own sampler
-
-        VkDescriptorSetLayoutCreateInfo layoutInfo{};
-        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutInfo.bindingCount = 1;
-        layoutInfo.pBindings = &samplerLayoutBinding;
-
-        if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &samplerSetLayout) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create descriptor set layout!");
-        }
-
-        // init imgui
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGui_ImplGlfw_InitForVulkan(m_Window.getGLFWwindow(), true);
-        ImGui_ImplVulkan_InitInfo init_info = {};
-        init_info.Instance = device.getInstance();
-        init_info.PhysicalDevice = device.getPhysicalDevice();
-        init_info.Device = device;
-        init_info.QueueFamily = device.GetGraphicsFamily();
-        init_info.Queue = device.graphicsQueue();
-        init_info.PipelineCache = VK_NULL_HANDLE;
-        init_info.DescriptorPool = imGuiDescriptorPool;// device.getImGuiDescriptorPool();
-        init_info.RenderPass = lveSwapChain->getRenderPass();
-        init_info.Subpass = 0;
-        init_info.Allocator = nullptr;
-        init_info.MinImageCount = SwapChain::MAX_FRAMES_IN_FLIGHT;
-        init_info.ImageCount = static_cast<uint32_t>(lveSwapChain->imageCount());
-        init_info.CheckVkResultFn = nullptr;
-        ImGui_ImplVulkan_Init(&init_info);
 
         globalPool =
             DescriptorPool::Builder(device)
@@ -124,14 +42,8 @@ namespace Dog {
     }
 
     Renderer::~Renderer() {
-        ImGui_ImplVulkan_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-
-        vkDestroyDescriptorSetLayout(device, samplerSetLayout, nullptr);
-        vkDestroyDescriptorPool(device, imGuiDescriptorPool, nullptr);
-
         freeCommandBuffers();
+        glslang::FinalizeProcess();
     }
 
     void Renderer::Init()
@@ -143,7 +55,7 @@ namespace Dog {
         textureLibrary.AddTexture("assets/textures/texture.jpg");
         textureLibrary.AddTexture("assets/textures/dog.png");
         textureLibrary.AddTexture("assets/textures/viking_room.png");
-        textureLibrary.AddTexture("assets/models/textures/Book.png");
+        textureLibrary.AddTexture("assets/models/ModelTextures/Book.png");
 
         modelLibrary.AddModel("assets/models/quad.obj");
         modelLibrary.AddModel("assets/models/charles.glb");
@@ -247,36 +159,7 @@ namespace Dog {
 
         // Start the frame
         if (auto commandBuffer = beginFrame()) {
-            ImGui_ImplVulkan_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            // FPS
-            ImGui::BeginMainMenuBar();
-
-            char fpsText[32];
-            sprintf_s(fpsText, "FPS: %.1f", ImGui::GetIO().Framerate);
-
-            ImVec2 textSize = ImGui::CalcTextSize(fpsText, NULL, true);
-            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - textSize.x - 10);
-            ImGui::Text(fpsText);
-
-            ImGui::EndMainMenuBar();
-
-            ImGui::ShowDemoWindow();
-            {
-                // draw an imgui image
-                ImGui::Begin("Texture");
-
-                // loop through all textures and draw them
-                ImGui::VulkanImage(textureLibrary, "assets/textures/texture.jpg", ImVec2(256, 256));
-
-                for (size_t i = 1; i < textureLibrary.getTextureCount(); i++) {
-                    ImGui::VulkanImage(textureLibrary, i, ImVec2(256, 256));
-                }
-
-                ImGui::End();
-            }
+            Engine::Get().GetEditor().BeginFrame();
 
             int frameIndex = getFrameIndex();
             FrameInfo frameInfo{
@@ -310,8 +193,7 @@ namespace Dog {
             simpleRenderSystem->renderGameObjects(frameInfo);
             pointLightSystem->render(frameInfo);
 
-            ImGui::Render();
-            ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+            Engine::Get().GetEditor().EndFrame(commandBuffer);
 
             endSwapChainRenderPass(commandBuffer);
             endFrame();
@@ -332,14 +214,14 @@ namespace Dog {
         }
         vkDeviceWaitIdle(device);
 
-        if (lveSwapChain == nullptr) {
-            lveSwapChain = std::make_unique<SwapChain>(device, extent);
+        if (m_SwapChain == nullptr) {
+            m_SwapChain = std::make_unique<SwapChain>(device, extent);
         }
         else {
-            std::shared_ptr<SwapChain> oldSwapChain = std::move(lveSwapChain);
-            lveSwapChain = std::make_unique<SwapChain>(device, extent, oldSwapChain);
+            std::shared_ptr<SwapChain> oldSwapChain = std::move(m_SwapChain);
+            m_SwapChain = std::make_unique<SwapChain>(device, extent, oldSwapChain);
 
-            if (!oldSwapChain->compareSwapFormats(*lveSwapChain.get())) {
+            if (!oldSwapChain->compareSwapFormats(*m_SwapChain.get())) {
                 throw std::runtime_error("Swap chain image(or depth) format has changed!");
             }
         }
@@ -372,7 +254,7 @@ namespace Dog {
     VkCommandBuffer Renderer::beginFrame() {
         assert(!isFrameStarted && "Can't call beginFrame while already in progress");
 
-        auto result = lveSwapChain->acquireNextImage(&currentImageIndex);
+        auto result = m_SwapChain->acquireNextImage(&currentImageIndex);
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
             recreateSwapChain();
             return nullptr;
@@ -403,7 +285,7 @@ namespace Dog {
             throw std::runtime_error("failed to record command buffer!");
         }
 
-        auto result = lveSwapChain->submitCommandBuffers(&commandBuffer, &currentImageIndex);
+        auto result = m_SwapChain->submitCommandBuffers(&commandBuffer, &currentImageIndex);
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ||
             m_Window.wasWindowResized()) {
             m_Window.resetWindowResizedFlag();
@@ -425,11 +307,11 @@ namespace Dog {
 
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = lveSwapChain->getRenderPass();
-        renderPassInfo.framebuffer = lveSwapChain->getFrameBuffer(currentImageIndex);
+        renderPassInfo.renderPass = m_SwapChain->getRenderPass();
+        renderPassInfo.framebuffer = m_SwapChain->getFrameBuffer(currentImageIndex);
 
         renderPassInfo.renderArea.offset = { 0, 0 };
-        renderPassInfo.renderArea.extent = lveSwapChain->getSwapChainExtent();
+        renderPassInfo.renderArea.extent = m_SwapChain->getSwapChainExtent();
 
         std::array<VkClearValue, 2> clearValues{};
         clearValues[0].color = { 0.01f, 0.01f, 0.01f, 1.0f };
@@ -442,11 +324,11 @@ namespace Dog {
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = static_cast<float>(lveSwapChain->getSwapChainExtent().width);
-        viewport.height = static_cast<float>(lveSwapChain->getSwapChainExtent().height);
+        viewport.width = static_cast<float>(m_SwapChain->getSwapChainExtent().width);
+        viewport.height = static_cast<float>(m_SwapChain->getSwapChainExtent().height);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
-        VkRect2D scissor{ {0, 0}, lveSwapChain->getSwapChainExtent() };
+        VkRect2D scissor{ {0, 0}, m_SwapChain->getSwapChainExtent() };
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
     }

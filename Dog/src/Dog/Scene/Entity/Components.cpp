@@ -65,18 +65,6 @@ namespace Dog {
 		};
 	}
 
-	SpriteComponent::SpriteComponent()
-		: Color(1.0f)
-		, texturePath("square.png")
-	{
-	}
-
-	SpriteComponent::SpriteComponent(const glm::vec4& color, const std::string& texturePath)
-		: Color(color)
-		, texturePath(texturePath)
-	{
-	}
-
 	/*void CameraComponent::SetAsCurrentCamera()
 	{
 		//
@@ -126,11 +114,17 @@ namespace Dog {
 	}
 
 	ModelComponent::ModelComponent(const std::string& modelPath)
-		: modelPath(modelPath)
+		: ModelPath(modelPath)
 	{
 		// Get the model's index from the model library
-		modelIndex = Engine::Get().GetModelLibrary().AddModel(modelPath);
-		DOG_INFO("ModelComponent: Model path: {0}, Model index: {1}", modelPath, modelIndex);
+		ModelIndex = Engine::Get().GetModelLibrary().AddModel(modelPath);
+		DOG_INFO("ModelComponent: Model path: {0}, Model index: {1}", ModelPath, ModelIndex);
+	}
+
+	void ModelComponent::SetModel(const std::string& modelPath)
+	{
+		ModelPath = modelPath;
+		ModelIndex = Engine::Get().GetModelLibrary().AddModel(ModelPath);
 	}
 
 } // namespace Dog

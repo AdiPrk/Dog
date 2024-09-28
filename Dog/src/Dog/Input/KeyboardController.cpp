@@ -2,16 +2,17 @@
 #include "Entities/GameObject.h"
 #include "Graphics/Vulkan/Window/Window.h"
 #include "KeyboardController.h"
+#include "Input/input.h"
 
 namespace Dog {
 
     void KeyboardMovementController::moveInPlaneXZ(
         GLFWwindow* window, float dt, GameObject& gameObject) {
         glm::vec3 rotate{ 0 };
-        if (glfwGetKey(window, keys.lookRight) == GLFW_PRESS) rotate.y += 1.f;
-        if (glfwGetKey(window, keys.lookLeft) == GLFW_PRESS) rotate.y -= 1.f;
-        if (glfwGetKey(window, keys.lookUp) == GLFW_PRESS) rotate.x += 1.f;
-        if (glfwGetKey(window, keys.lookDown) == GLFW_PRESS) rotate.x -= 1.f;
+        if (Input::isKeyDown(Key::RIGHT)) rotate.y += 1.f;
+        if (Input::isKeyDown(Key::LEFT)) rotate.y -= 1.f;
+        if (Input::isKeyDown(Key::UP)) rotate.x += 1.f;
+        if (Input::isKeyDown(Key::DOWN)) rotate.x -= 1.f;
 
         if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon()) {
             gameObject.transform.rotation += lookSpeed * dt * glm::normalize(rotate);
@@ -27,15 +28,16 @@ namespace Dog {
         const glm::vec3 upDir{ 0.f, -1.f, 0.f };
 
         glm::vec3 moveDir{ 0.f };
-        if (glfwGetKey(window, keys.moveForward) == GLFW_PRESS) moveDir += forwardDir;
-        if (glfwGetKey(window, keys.moveBackward) == GLFW_PRESS) moveDir -= forwardDir;
-        if (glfwGetKey(window, keys.moveRight) == GLFW_PRESS) moveDir += rightDir;
-        if (glfwGetKey(window, keys.moveLeft) == GLFW_PRESS) moveDir -= rightDir;
-        if (glfwGetKey(window, keys.moveUp) == GLFW_PRESS) moveDir += upDir;
-        if (glfwGetKey(window, keys.moveDown) == GLFW_PRESS) moveDir -= upDir;
+
+        if (Input::isKeyDown(Key::W)) moveDir += forwardDir;
+        if (Input::isKeyDown(Key::S)) moveDir -= forwardDir;
+        if (Input::isKeyDown(Key::D)) moveDir += rightDir;
+        if (Input::isKeyDown(Key::A)) moveDir -= rightDir;
+        if (Input::isKeyDown(Key::E)) moveDir += upDir;
+        if (Input::isKeyDown(Key::Q)) moveDir -= upDir;
 
         // check shift
-        moveSpeed = (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) ? 8.f : 4.f;
+        moveSpeed = (Input::isKeyDown(Key::LEFTSHIFT)) ? 8.f : 4.f;
 
         if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon()) {
             gameObject.transform.translation += moveSpeed * dt * glm::normalize(moveDir);

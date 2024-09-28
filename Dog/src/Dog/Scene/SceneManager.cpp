@@ -1,7 +1,7 @@
 #include <PCH/pch.h>
 #include "SceneManager.h"
 #include "Scene.h"
-//#include "Serializer/sceneSerializer.h"
+#include "Serializer/SceneSerializer.h"
 //#include "Dog/Assets/Packer/assetPacker.h"
 
 namespace Dog {
@@ -43,7 +43,7 @@ namespace Dog {
 			m_ActiveScene = new Scene(m_NextScene);
 
 			// load it
-			// SceneSerializer::Deserialize(m_ActiveScene, "DogAssets/Scenes/" + m_NextScene + ".yaml");
+			SceneSerializer::Deserialize(m_ActiveScene, "assets/scenes/" + m_NextScene + ".yaml");
 
 			m_NextScene.clear();
 

@@ -110,16 +110,21 @@ namespace Dog {
         registry.view<TransformComponent, ModelComponent>().each
         ([&](const auto& entity, const TransformComponent& transform, const ModelComponent& model)
             {
-                if (model.modelIndex == INVALID_MODEL_INDEX) return;
+                if (model.ModelIndex == INVALID_MODEL_INDEX) return;
 
-                Model* pModel = modelLibrary.GetModelByIndex(model.modelIndex);
+                Model* pModel = modelLibrary.GetModelByIndex(model.ModelIndex);
 
                 for (auto& mesh : pModel->meshes) {
                     SimplePushConstantData push{};
                     push.modelMatrix = transform.mat4();
                     push.normalMatrix = transform.normalMatrix();
 
-                    push.textureIndex = 0;// mesh.textureIndex;
+                    if (mesh.textureIndex == INVALID_TEXTURE_INDEX) {
+                        push.textureIndex = 0;
+                    }
+                    else {
+                        push.textureIndex = mesh.textureIndex;
+                    }
 
                     vkCmdPushConstants(
                         frameInfo.commandBuffer,

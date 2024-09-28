@@ -19,6 +19,8 @@ namespace Dog {
         auto& GetBoneInfoMap() { return mBoneInfoMap; }
         int& GetBoneCount() { return mBoneCounter; }
 
+        const std::string& GetPath() const { return path; }
+
         std::vector<Mesh> meshes;
 
     private:
@@ -31,7 +33,8 @@ namespace Dog {
         void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
 
         void ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene);
-
+        
+        std::string path;
         Device& device;
         std::map<std::string, BoneInfo> mBoneInfoMap;
         int mBoneCounter = 0;

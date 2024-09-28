@@ -37,6 +37,13 @@ namespace Dog {
 		 *********************************************************************/
 		Model* GetModelByIndex(uint32_t index);
 
+		/*********************************************************************
+		 * return: The number of models in the library
+		 * 
+		 * brief: Get the number of models in the library
+		 *********************************************************************/
+		uint32_t GetModelCount() const { return static_cast<uint32_t>(m_Models.size()); }
+
 	private:
 		std::vector<std::unique_ptr<Model>> m_Models;
 		std::unordered_map<std::string, uint32_t> m_ModelMap;

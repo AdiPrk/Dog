@@ -10,7 +10,7 @@ namespace Dog {
 	class ImGuiTextureManager {
 	public:
 		// needs device, renderer, texture manager
-		ImGuiTextureManager(Device& device, Renderer& renderer);
+		ImGuiTextureManager(Device& device);
 		~ImGuiTextureManager();
 
 		VkDescriptorSet CreateDescriptorSet(const VkImageView& imageView, const VkSampler& sampler);
@@ -23,7 +23,6 @@ namespace Dog {
 
 	private:
 		Device& device;
-		Renderer& lveRenderer;
 
 		std::unordered_map<std::string, VkDescriptorSet> descriptorMap;
 	};

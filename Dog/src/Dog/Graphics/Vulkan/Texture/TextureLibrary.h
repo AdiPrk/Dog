@@ -9,7 +9,7 @@ namespace Dog {
 
 	class TextureLibrary {
 	public:
-		TextureLibrary(Device& device, Renderer& renderer);
+		TextureLibrary(Device& device);
 		~TextureLibrary();
 
 		TextureLibrary(const TextureLibrary&) = delete;
@@ -31,7 +31,6 @@ namespace Dog {
 		std::vector<std::unique_ptr<Texture>> textures;
 		std::unordered_map<std::string, uint32_t> textureMap;
 		Device& device;
-		Renderer& renderer;
 
 		ImGuiTextureManager imGuiTextureManager;
 
